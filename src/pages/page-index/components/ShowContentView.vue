@@ -103,22 +103,24 @@
                         </div>
                         <div class="logintop">
                             <div class="loginC loginA select">
-                                <span>个人登录</span>
+                                <span>{{title}}</span>
                             </div>
                             <div class="loginC loginB">
                             </div>
                         </div>
                         <div class="loginmain">
-                            <div class="ContentA">
-                                <div class="txtInput"><input name="" type="text" placeholder="请输入用户名" /></div>
-                                <div class="txtInput"><input name="" type="text" placeholder="请输入密码" /></div>
+                            <div v-show="isShow" class="ContentA">
+                                <div class="txtInput"><input v-model="loginArgs" name="" type="text"
+                                        placeholder="请输入用户名/手机号/邮箱" /></div>
+                                <div class="txtInput"><input v-model="password" name="" type="text" placeholder="请输入密码" />
+                                </div>
                                 <div class="txtbtn">
                                     <div style="float:left">
                                         <br />
                                         <div class="clear"></div>
                                         <a href="/login/forget" class="a2">忘记密码</a>
                                     </div>
-                                    <input name="" type="button" class="lobtn" value="登  录" />
+                                    <input @click="submitFormDTO()" name="" type="button" class="lobtn" value="登  录" />
                                 </div>
                                 <div class="zcbox">
                                     <div class="zc2">
@@ -127,6 +129,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div v-show="!isShow" class="ContentA">
+                                <span class="bigFont">用户名：</span>{{ userName }} <br/>   
+                                <span class="bigFont">手机号：</span>{{ phone }} <br/> 
+                                <span class="bigFont">邮箱：</span>{{ userEmail }} <br/> 
+                            </div>
+    
                         </div>
                     </div>
                     <div class="clear"></div>
@@ -161,17 +169,110 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
+    // edit by JoneElmo
     name: 'showContent',
     data() {
         return {
-            arr: new Array(10)
+            arr: new Array(10),
+
+            isShow:true,
+            loginArgs: "",
+            title:"个人登陆",
+
+            phone: null,
+            userEmail: null,
+            password: null,
+            userName: null,
+            code: null,
+            userId: null
         }
     },
     methods: {
         jumpSearchJob() {
             window.location = '/index/search';
+        },
+        getUserInfo() {  //获取用户详细信息
+            let that = this
+            axios({
+                method: 'post',
+                url: '/api/user-info/getUserInfo',
+                data: {
+                    userId: that.userId,
+                    phone: that.phone,
+                    userEmail: that.userEmail,
+                    userName: that.userName,
+                    password: that.password,
+                    code: that.code
+                }
+            })
+                .then(function (result) {
+                    console.log(result)
+                    let phone = result.data.object.phone
+                    console.log(result.data.object.userName)
+                    that.userName = result.data.object.userName
+                    let email = result.data.object.userEmail
+                    if(phone == null){
+                        that.phone = "未绑定手机号"
+                    }
+                    if(email == null){
+                        that.userEmail = "未绑定邮箱"
+                    }
+
+                })
+        },
+        submitFormDTO() {
+            // 简单的手机号正则，匹配11位数字
+            const phoneRegex = /^[1-9]\d{10}$/;
+            // 简单的邮箱正则，匹配常见的邮箱格式
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            // 简单的用户名正则，匹配以"user_"开头，后面跟着数字的格式
+            const usernameRegex = /^user_\d+$/;
+
+            if (phoneRegex.test(this.loginArgs)) {
+                this.phone = this.loginArgs;
+            }
+            if (emailRegex.test(this.loginArgs)) {
+                this.userEmail = this.loginArgs;
+            }
+            if (usernameRegex.test(this.loginArgs)) {
+                this.userName = this.loginArgs;
+            }
+
+            let that = this;
+            axios({
+                method: 'post',
+                url: '/api/user-info/login',
+                async: false,
+                data: {
+                    phone: that.phone,
+                    userEmail: that.userEmail,
+                    userName: that.userName,
+                    password: that.password,
+                    userId: that.userId,
+                    code: that.code
+                }
+            })
+                .then(function (result) {
+                    console.log(result)
+                    let code = result.data.code
+                    if (code == 100000) {
+                        alert("用户不存在或密码错误")
+                    } else {
+                        that.isShow = false
+                        that.title = "个人资料"
+                        that.getUserInfo()
+                    }
+                })
+
         }
     }
 }
 </script>
+<style>
+    .bigFont{
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>

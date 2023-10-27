@@ -24,12 +24,12 @@
                         <div class="zcpart0">
                             <div class="zcpart5">
                                 <span></span>
-                                <input name="" type="text" placeholder="手机号或邮箱" />
+                                <input name="" v-model="formArgs" type="text" placeholder="手机号或邮箱" />
                             </div>
                             <div class="zcpart6">手机号/邮箱用于登录和找回密码</div>
                             <div class="zcpart7">
                                 <span></span>
-                                <input name="" type="text" placeholder="设置密码" />
+                                <input name="" v-model="password" type="text" placeholder="设置密码" />
                             </div>
                             <div class="zcpart6">请输入6-20个字符</div>
                             <div class="zcpart2_c">
@@ -38,11 +38,9 @@
                             </div>
                             <div class="clear"></div>
                             <div class="zcpart8">
-                                <a href="/login/register">注 册</a>
+                                <a href="#" @click="register()" >注 册</a>
                             </div>
-                            <div class="zcpart8 zcpart9">
-                                <a href="/login/resume">一分钟填写简历 快速填写 省时省力</a>
-                            </div>
+      
                         </div>
                     </ul>
                 </div>
@@ -58,15 +56,84 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
-            isShow: false
+            isShow: false,
+
+            formArgs:"",
+
+            tbId:null,
+            userId:null,
+            userName:null,
+            email:null,
+            phone:null,
+            password:""
+
+
         }
     },
     methods: {
         check() {
             this.isShow = !this.isShow
+        },
+        register(){
+            if((this.formArgs == "") || (this.password == "")){
+                alert("请填写完整信息");
+            }else{
+                // 简单的手机号正则，匹配11位数字
+                const phoneRegex = /^[1-9]\d{10}$/;
+                // 简单的邮箱正则，匹配常见的邮箱格式
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                // 密码正则
+                const psswordRegex = /^[a-zA-Z0-9]{6,20}$/;
+
+                if(phoneRegex.test(this.formArgs)){
+                    this.phone = this.formArgs;
+                }else if(emailRegex.test(this.formArgs)){
+                    this.email = this.formArgs;
+                }else{
+                    alert("请输入正确的手机号或邮箱");
+                    return;
+                }
+
+                if(psswordRegex.test(this.password)){
+                    this.password = this.password;
+                }else{
+                    alert("请输入正确格式的密码！")
+                    return;
+                }
+
+                if(!this.isShow){
+                    alert("请阅读并接受协议后再注册用户！")
+                }else{
+                    let that = this;
+                    axios({
+                        method:'post',
+                        url:'/api/user-info/register',
+                        async:true,
+                        data:{
+                            tbId:that.tbId,
+                            userId:that.userId,
+                            userName:that.userName,
+                            email:that.email,
+                            phone:that.phone,
+                            password:that.password
+                        }
+                    })
+                    .then(function (result){
+                        console.log(result)
+                        if(result.data.code == 100001){
+                            alert("注册成功！");
+                        }else{
+                            alert("注册失败！");
+                        }
+                        // that.$router.push({path:'/login'})
+                        window.location.href="/login";
+                    })
+                }
+            }
         }
     }
 }
