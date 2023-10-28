@@ -122,7 +122,8 @@
 export default {
     data() {
         return {
-            show_sex: true
+            show_sex: true,
+
         }
     },
     methods: {
