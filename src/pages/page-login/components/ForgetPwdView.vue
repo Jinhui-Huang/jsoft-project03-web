@@ -36,14 +36,17 @@
                 <div id="step_1" class="restInfo" v-show="show_1">
                     <div class="box1">
                         <span>账 户：</span>
-                        <input name="" v-model="fogetArgs" type="text" placeholder="用户名/邮箱/已验证手机号" />
+                        <input name="" v-model="forgetArgs" type="text" placeholder="用户名/邮箱/已验证手机号" />
                         <div class="clear"></div>
                     </div>
-                    <div class="box1">
-                        <span>验证码：</span>
-                        <input name="" v-model="imageVarifyCode" type="text" class="yzm" />
-                        <img :src="imageUrl" width="100" height="35" />
-                        <div class="clear"></div>
+                    <div class="box1 verify">
+
+                        <span>人机校验：</span>
+                        <br>
+                        <br>
+                        <SliderVerificationCode height="35px" sliderWidth="44px" inactiveValue=false activeValue=true
+                            v-model="isSuccess" />
+
                     </div>
                     <div class="box1">
                         <input type="button" class="onebtn" @click="show(1)" value="下一步" />
@@ -70,12 +73,12 @@
                     </div>
                     <div class="box1">
                         <span>新密码：</span>
-                        <input name="" type="text" />
+                        <input v-model="newPassword" name="" type="password" />
                         <div class="clear"></div>
                     </div>
                     <div class="box1">
                         <span>确认密码：</span>
-                        <input name="" type="text" />
+                        <input v-model="sureNewPassword" name="" type="password" />
                         <div class="clear"></div>
                     </div>
                     <div class="box1">
@@ -105,7 +108,7 @@ export default {
             show_4: false,
             imageUrl: '/static/images/VerifyCode.jpg',
 
-            fogetArgs: "",
+            forgetArgs: "",
             imageVarifyCode: "",
             userId: null,
             phone: null,
@@ -113,12 +116,28 @@ export default {
             userName: null,
             password: null,
             code: null,
-            text: "",
+            text: "111",
             smsCode: null,
-            smsCodeInput: ""
+            smsCodeInput: "",
+
+            isSuccess: false,
+
+            newPassword: "",
+            sureNewPassword: ""
         }
     },
     methods: {
+        onSuccess() {
+            console.log("验证成功")
+            this.isSuccess = true
+        },
+        onFail() {
+            console.log("验证失败")
+            this.isSuccess = false
+        },
+        onRefresh() {
+            console.log("验证码刷新")
+        },
         getSMSCode() {  //获取验证码
             let that = this
             axios({
@@ -154,7 +173,6 @@ export default {
             })
                 .then(function (result) {
                     console.log(result)
-                    // console.log(result.data.object.phone)
                     that.phone = result.data.object.phone
                     console.log(result.data.object.userName)
                     that.userName = result.data.object.userName
@@ -187,12 +205,43 @@ export default {
             })
 
         },
+        setNewPassword() {
+            let that = this
+            return new Promise((resolve, reject) => {
+                axios({
+                    method: 'post',
+                    url: '/api/user/changePassword',
+                    data: {
+                        tbId:null,
+                        userId: that.userId,
+                        userName: that.userName,
+                        email: that.userEmail,
+                        phone: that.phone,
+                        password: that.sureNewPassword
+                    }
+                })
+                    .then(function (result) {
+                        console.log("修改密码的返回值：" + result.data.code)
+                        if (result.data.code == "100001") {
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    })
+
+            })
+
+        },
         show(stepIndex) {
             switch (stepIndex) {
                 case 1:
-                    if (this.fogetArgs == "" || this.imageVarifyCode == "") {
+                    if (this.forgetArgs.trim() == "") {
                         alert("请输入完整信息！")
                         return;
+                    }
+                    if (!this.isSuccess) {
+                        alert("请进行人机校验")
+                        return
                     }
 
                     const phoneRegex = /^[1-9]\d{10}$/;
@@ -201,30 +250,26 @@ export default {
 
                     const usernameRegex = /^user_\d+$/;
 
-                    //发送请求获取图片验证码 todo
-                    // axios({
-                    //     method: 'get', 
-                    //     url: '/api/user-info/getImageVerifyCode',
-                    // })
-                    // .then(function(result){
-
-                    // })
-
-                    if (phoneRegex.test(this.fogetArgs)) {
-                        this.phone = this.fogetArgs;
-                        this.text = "激活码已经发送到您的手机：" + this.phone + " 中"
-                    }
-                    if (emailRegex.test(this.fogetArgs)) {
-                        this.userEmail = this.fogetArgs;
-                        this.text = "激活码已经发送到您的邮箱：" + this.userEmail + " 中"
+                    if (!phoneRegex.test(this.forgetArgs) && !emailRegex.test(this.forgetArgs) && !usernameRegex.test(this.forgetArgs)) {
+                        alert("请检查输入信息格式是否正确！")
+                        return
                     }
 
-                    if (usernameRegex.test(this.fogetArgs)) {
-                        this.userName = this.fogetArgs;
+                    if (phoneRegex.test(this.forgetArgs)) {
+                        this.phone = this.forgetArgs;
+                        this.text = "发送激活码到您的手机：" + this.phone + " 中"
+                    }
+                    if (emailRegex.test(this.forgetArgs)) {
+                        this.userEmail = this.forgetArgs;
+                        this.text = "发送激活码到您的邮箱：" + this.userEmail + " 中"
+                    }
+
+                    if (usernameRegex.test(this.forgetArgs)) {
+                        this.userName = this.forgetArgs;
                         let that = this
                         //获取用户详细信息
                         this.getUserInfo()
-                        that.text = "激活码已经发送到您的手机：" + that.phone + " 中"
+                        that.text = "发送激活码到您的手机：" + that.phone + " 中"
                     }
 
                     this.show_1 = false
@@ -232,16 +277,13 @@ export default {
                     break
                 //cookie中存放用户编号和用户名
                 case 2:
-                    // let r = this.validateCode();
-                    // if (!r) {
-                    //     break
-                    // }
+
                     let that = this
                     this.validateCode().then(function (result) {
                         if (result) {
                             that.getUserInfo()
                             that.show_2 = false
-                            that.show_3 = true           
+                            that.show_3 = true
                         } else {
                             alert("验证码校验不通过")
                             return
@@ -249,7 +291,12 @@ export default {
                     })
                     break
                 case 3:
-
+                    if (!(this.newPassword == this.sureNewPassword)) {
+                        alert("两次输入的密码不一致")
+                        return
+                    } else {
+                        this.setNewPassword()
+                    }
                     this.show_3 = false
                     this.show_4 = true
                     break
@@ -260,3 +307,9 @@ export default {
     }
 }
 </script>
+<style>
+.verify {
+    width: 300px;
+    margin-left: 25px;
+}
+</style>
