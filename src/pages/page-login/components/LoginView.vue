@@ -27,21 +27,21 @@
                     <div class="normalLogin">
                         <div class="username">
                             <span></span>
-                            <input name="" type="text" placeholder="请输入用户名/邮箱/已验证手机号" />
+                            <input name="loginArgs" v-model="loginArgs" type="text" placeholder="请输入用户名/邮箱/已验证手机号" />
                         </div>
                         <div class="password">
                             <span></span>
-                            <input name="" type="text" placeholder="请输入密码" />
+                            <input name="password" v-model="password" type="text" placeholder="请输入密码" />
                         </div>
                         <div class="autoLogo">
                             <a href="/login/forget" class="pasd">忘记密码？</a>
                         </div>
                         <div class="autoLogo">
-                            <span class="CheckBox" :class="{Yes: isActive}" @click="check()"></span>
+                            <span class="CheckBox" :class="{ Yes: isActive }" @click="check()"></span>
                             <span>我已阅读并接受<a href="/login/user_agree">用户协议</a></span>
                         </div>
                         <div class="logobtn">
-                            <a href="/login">登 录</a>
+                            <a href="#" @click="submitFormDTO()">登 录</a>
                         </div>
                         <div class="zcbtn">
                             <a href="/login/register">还没有账号？立即注册</a>
@@ -65,15 +65,73 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
     data() {
         return {
-            isActive: false
+            isActive: false,
+            loginArgs: "",
+
+            phone: null,
+            userEmail: null,
+            password: null,
+            userName: null,
+            code: null,
+            userId: null
         }
     },
     methods: {
         check() {
             this.isActive = !this.isActive
+        },
+        submitFormDTO() {
+            // 简单的手机号正则，匹配11位数字
+            const phoneRegex = /^[1-9]\d{10}$/;
+            // 简单的邮箱正则，匹配常见的邮箱格式
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            // 简单的用户名正则，匹配以"user_"开头，后面跟着数字的格式
+            const usernameRegex = /^user_\d+$/;
+
+            if (phoneRegex.test(this.loginArgs)) {
+                this.phone = this.loginArgs;
+            }
+            if (emailRegex.test(this.loginArgs)) {
+                this.userEmail = this.loginArgs;
+            }
+            if (usernameRegex.test(this.loginArgs)) {
+                this.userName = this.loginArgs;
+            }
+
+            if (!this.isActive) {
+                alert("请阅读并同意用户协议再登陆！")
+            } else {
+                let that = this;
+                axios({
+                    method: 'post',
+                    url: '/api/user-info/login',
+                    async: false,
+                    withCredentials: true,
+                    data: {
+                        phone: that.phone,
+                        userEmail: that.userEmail,
+                        userName: that.userName,
+                        password: that.password,
+                        userId: that.userId,
+                        code: that.code
+                    }
+                })
+                    .then(function (result) {
+                        console.log(result)
+                        let code = result.data.code
+                        if (code == 100000) {
+                            alert("用户不存在或密码错误")
+                        } else {
+                            // that.$router.push('/index')
+                            window.location.href = "/index"
+                        }
+                    })
+            }
         }
     }
 }
