@@ -625,6 +625,8 @@ table.rizhi2 td{height: 45px;padding-left: 5px;}
 .questionsBox .quesBox.show p{ display:block}
 .questionsBox .quesBox.show a{color: #F06B02;font-weight: bold;background: url(../images/per54.png) 12px 12px no-repeat #F6F6F6;}
 
+/* 我的css */
+.red-text{color: #ff0404;font-size: large;}
 
 
 
