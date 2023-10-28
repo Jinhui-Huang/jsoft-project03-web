@@ -23,91 +23,91 @@
                     </div>
                     <div class="jlbox2">
                         <span class="tit">姓名</span>
-                        <input name="" type="text" class="txtcon txt1" />
+                        <input name="" v-model="resumeName" type="text" class="txtcon txt1" />
                     </div>
                     <div class="jlbox2">
                         <span class="tit">我是</span>
-                        <div class="sex" :class="{on: show_sex}" @click="showSex('man')">男</div>
-                        <div class="sex" :class="{on: !show_sex}" @click="showSex('girl')">女</div>
+                        <div class="sex" :class="{ on: show_sex }" @click="showSex('man')">男</div>
+                        <div class="sex" :class="{ on: !show_sex }" @click="showSex('girl')">女</div>
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">出生于</span>
-                        <input name="" type="text" class="txtcon txt3" />
+                        <input name="" v-model="resumePlace" type="text" class="txtcon txt3" />
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">手机号</span>
-                        <input name="" type="text" class="txtcon txt3" />
+                        <input name="" v-model="resumePhone" type="text" class="txtcon txt3" />
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">毕业学校</span>
-                        <input name="" type="text" class="txtcon txt3" />
-                        <select class="txtcon txt5">
-                            <option value="">初中及一下</option>
-                            <option value="">中专/中技</option>
-                            <option value="">高中</option>
-                            <option value="">大专</option>
-                            <option value="">硕士</option>
-                            <option value="">本科</option>
-                            <option value="0">博士</option>
+                        <input name="" v-model="resumeSchool" type="text" class="txtcon txt3" />
+                        <select v-model="resumeDegree" @change="updateResumeDegree()" class="txtcon txt5">
+                            <option value="0">高中</option>
+                            <option value="1">专科</option>
+                            <option value="2">本科</option>
+                            <option value="3">硕士</option>
+                            <option value="4">博士</option>
                         </select>
                         <div class="titxt">学历</div>
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
-                        <span class="tit">专业名称</span>
-                        <input name="" type="text" class="txtcon txt3" />
-                        <div class="clear"></div>
-                    </div>
-                    <div class="jlbox2">
                         <span class="tit">所学专业</span>
-                        <input name="" type="text" class="txtcon txt3" />
+                        <input name="" v-model="resumeMajor" type="text" class="txtcon txt3" />
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">想在</span>
-                        <select class="txtcon txt5">
-                            <option value="">北京</option>
-                            <option value="">上海</option>
-                            <option value="">深圳</option>
-                            <option value="">广州</option>
-                            <option value="">长春</option>
+                        <select v-model="resumeLoc" class="txtcon txt5">
+                            <option value="0">北京</option>
+                            <option value="1">上海</option>
+                            <option value="2">深圳</option>
+                            <option value="3">广州</option>
+                            <option value="4">长春</option>
+                            <option value="5">沈阳</option>
+                            <option value="6">武汉</option>
+                            <option value="7">杭州</option>
+                            <option value="8">苏州</option>
+                            <option value="9">西安</option>
+                            <option value="10">大连</option>
+                            <option value="11">南京</option>
                         </select>
                         <div class="titxt">找月薪</div>
-                        <select class="txtcon txt6">
-                            <option value="">30000以上</option>
-                            <option value="">20000-30000</option>
-                            <option value="">10000-20000</option>
-                            <option value="">5000-10000</option>
-                            <option value="">5000以下</option>
+                        <select v-model="resumeSalary" class="txtcon txt6">
+                            <option value="5">30000以上</option>
+                            <option value="4">20000-30000</option>
+                            <option value="3">10000-20000</option>
+                            <option value="2">5000-10000</option>
+                            <option value="1">5000以下</option>
                         </select>
                         <div class="titxt">的</div>
-                        <select class="txtcon txt5">
-                            <option value="">全职</option>
-                            <option value="">兼职</option>
-                            <option value="">实习</option>
+                        <select v-model="resumeJobType" class="txtcon txt5">
+                            <option value="0">全职</option>
+                            <option value="1">兼职</option>
+                            <option value="2">实习</option>
                         </select>
                         <div class="titxt">工作</div>
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">求职状态</span>
-                        <select class="txtcon txt2">
-                            <option value="">离职-随时到岗</option>
-                            <option value="">在职-月内到岗</option>
-                            <option value="">在职-考虑机会</option>
-                            <option value="">在职-暂不考虑</option>
+                        <select v-model="resumeStatus" class="txtcon txt2">
+                            <option value="0">离职-随时到岗</option>
+                            <option value="1">在职-月内到岗</option>
+                            <option value="2">在职-考虑机会</option>
+                            <option value="3">在职-暂不考虑</option>
                         </select>
                     </div>
                     <div class="jlbox2">
                         <span class="tit">邮箱</span>
-                        <input name="" type="text" class="txtcon txt3" />
+                        <input v-model="resumeEmail" name="" type="text" class="txtcon txt3" />
                         <div class="clear"></div>
                     </div>
                     <div class="jlbox2">
-                        <input name="" type="button" value="生成简历" class="jlbtn" />
+                        <input @click="submitData()" name="" type="button" value="生成简历" class="jlbtn" />
                     </div>
                 </div>
             </div>
@@ -119,21 +119,74 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
             show_sex: true,
-
+            tbId: null,
+            resumeId: null,
+            userId: null,
+            resumeName: null,
+            resumeGender: 0,
+            resumePlace: null,
+            resumePhone: null,
+            resumeSchool: null,
+            resumeDegree: 0,
+            resumeMajor: null,
+            resumeLoc: 0,
+            resumeSalary: 2,
+            resumeJobType: 0,
+            resumeStatus: 0,
+            resumeEmail: null
         }
     },
     methods: {
         showSex(sex) {
-            if(sex == 'man') {
+            if (sex == 'man') {
                 this.show_sex = true
+                this.resumeGender = 1
             } else {
                 this.show_sex = false
+                this.resumeGender = 0
             }
+            console.log(this.resumeGender);
+        },
+        updateResumeDegree() {
+            console.log(this.resumeDegree);
+        },
+        submitData() { //生成简历
+            let that = this
+            axios({
+                method: 'post',
+                url: '/api/resume/generateResume',
+                data: {
+                    tbId: that.tbId,
+                    resumeId: that.resumeId,
+                    userId: that.userId,
+                    resumeName: that.resumeName,
+                    resumeGender: that.resumeGender,
+                    resumePlace: that.resumePlace,
+                    resumePhone: that.resumePhone,
+                    resumeSchool: that.resumeSchool,
+                    resumeDegree: that.resumeDegree,
+                    resumeMajor: that.resumeMajor,
+                    resumeLoc: that.resumeLoc,
+                    resumeSalary: that.resumeSalary,
+                    resumeJobType: that.resumeJobType,
+                    resumeStatus: that.resumeStatus,
+                    resumeEmail: that.resumeEmail
+                }
+            })
+                .then(function (result) {
+                    console.log(result);
+
+                })
         }
+    },
+    mounted(){
+        // 进入页面判断是否存在简历，如果存在就回显否则
+        
     }
 }
 </script>

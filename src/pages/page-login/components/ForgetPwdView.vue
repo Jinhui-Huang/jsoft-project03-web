@@ -123,7 +123,7 @@ export default {
             let that = this
             axios({
                 method: 'post',
-                url: '/api/user-info/sendVerifyCode',
+                url: '/api/user/sendVerifyCode',
                 data: {
                     userId: that.userId,
                     phone: that.phone,
@@ -165,7 +165,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios({
                     method: 'post',
-                    url: '/api/user-info/validateCode',
+                    url: '/api/user/validateCode',
                     data: {
                         userId: that.userId,
                         phone: that.phone,

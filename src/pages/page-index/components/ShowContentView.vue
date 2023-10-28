@@ -189,6 +189,10 @@ export default {
             userId: null
         }
     },
+    mounted(){
+       //判断用户是否登陆 
+       
+    },
     methods: {
         jumpSearchJob() {
             window.location = '/index/search';

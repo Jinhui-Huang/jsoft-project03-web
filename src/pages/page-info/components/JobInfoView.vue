@@ -23,7 +23,7 @@
         <div class="jobtypeBox">
             <div class="DivLeft">
                 <div class="DivCompany">
-                    <div class="DivCompany_img"><img src="/static/images/company.gif" width="180" /></div>
+                    <div class="DivCompany_img"><img :src="require('@/../dist/static/images/company.gif')" width="180" /></div>
                     <h1><a href="/info/company">广州市***信息技术有限公司</a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
