@@ -31,7 +31,7 @@
                         </div>
                         <div class="password">
                             <span></span>
-                            <input name="password" v-model="password" type="text" placeholder="请输入密码" />
+                            <input name="password" v-model="password" type="password" placeholder="请输入密码" />
                         </div>
                         <div class="autoLogo">
                             <a href="/login/forget" class="pasd">忘记密码？</a>
@@ -109,7 +109,7 @@ export default {
                 let that = this;
                 axios({
                     method: 'post',
-                    url: '/api/user-info/login',
+                    url: '/api/user/login',
                     async: false,
                     withCredentials: true,
                     data: {
@@ -134,5 +134,6 @@ export default {
             }
         }
     }
+    
 }
 </script>

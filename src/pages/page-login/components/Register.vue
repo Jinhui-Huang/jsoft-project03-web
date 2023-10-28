@@ -111,7 +111,7 @@ export default {
                     let that = this;
                     axios({
                         method:'post',
-                        url:'/api/user-info/register',
+                        url:'/api/user/register',
                         async:true,
                         data:{
                             tbId:that.tbId,
