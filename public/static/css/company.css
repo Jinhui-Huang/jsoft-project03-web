@@ -26,6 +26,7 @@ body{ width:100%; min-width:1200px; margin:0 auto; font-size:12px; font-family:"
 .compMain .main .CpDetail .CompanyName{font-size: 24px;color: #333333;padding: 10px 0px 20px 0px;font-family: "微软雅黑";}
 .compMain .main .CpDetail .CompanyName .title{vertical-align: middle;display: inline-block;line-height: 28px;}
 .compMain .main .CpDetail .CompanyName .guanzhu{ display:inline-block;font-size: 12px;width: 65px;height: 22px;color: #FFF;text-align: center;line-height: 21px;background: url(../images/37.png) no-repeat;cursor: pointer;margin-left: 3px;}
+.compMain .main .CpDetail .CompanyName .ygz{ display:inline-block;font-size: 15px;width: 82px;height: 22px;color: #f20707;text-align: center;line-height: 18px;background: url(../images/18.png) no-repeat;cursor: pointer;margin-left: 3px;}
 .compMain .main .CpDetail .CompanyName img{vertical-align: middle;display: inline-block;}
 .compMain .main .CpDetail p{font-size: 14px;line-height: 28px;font-family: "微软雅黑"; color:#000}
 .compMain .main .CpDetail p a{color: #0068B7;}
@@ -140,7 +141,7 @@ body{ width:100%; min-width:1200px; margin:0 auto; font-size:12px; font-family:"
 
 .jobtypeBox .DivRight .DivRight_2 .divJob_2{ font-family: "微软雅黑";padding: 20px 0px;}
 .jobtypeBox .DivRight .DivRight_2 .divJob_2 .divJob_2_1{ float:left;background: #F96B2D;font-size: 16px;width: 130px;height: 40px;line-height: 40px;font-weight: bold; color:#fff;border-radius: 5px; text-align:center}
-.jobtypeBox .DivRight .DivRight_2 .divJob_2 .divJob_2_0{ float:left;background: #2c2927;font-size: 16px;width: 130px;height: 40px;line-height: 40px;font-weight: bold; color:#fff;border-radius: 5px; text-align:center}
+.jobtypeBox .DivRight .DivRight_2 .divJob_2 .divJob_2_0{ float:left;background: #5b5857;font-size: 16px;width: 130px;height: 40px;line-height: 40px;font-weight: bold; color:#fff;border-radius: 5px; text-align:center}
 .jobtypeBox .DivRight .DivRight_2 .divJob_2 .divJob_2_2{float:left;font-size: 14px; display: inline-block;height: 20px;line-height: 20px;background: url(../images/48.png) 2px 3px no-repeat;padding-left: 24px;width: 45px; cursor: pointer;color: #707070;margin-left: 20px; margin-top:8px;}
 .jobtypeBox .DivRight .DivRight_2 .divJob_2 .divJob_2_3{float:left;font-size: 14px; display: inline-block;height: 20px;line-height: 20px;background: url(../images/49.png) 2px 1px no-repeat;padding-left: 24px;width: 45px; cursor: pointer;color: #707070;margin-left: 20px; margin-top:8px;}
 
