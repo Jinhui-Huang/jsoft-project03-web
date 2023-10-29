@@ -23,14 +23,8 @@
         <div class="jobtypeBox">
             <div class="DivLeft">
                 <div class="DivCompany">
-<<<<<<< HEAD
                     <div class="DivCompany_img"><img :src="companyIcon" width="180" /></div>
-                    <h1><a href="/info/company">    </a><img src="/static/images/16.png" /></h1>
-=======
-                    <div class="DivCompany_img"><img :src="require('@/../dist/static/images/company.gif')" width="180" />
-                    </div>
-                    <h1><a href="/info/company">广州市***信息技术有限公司</a><img src="/static/images/16.png" /></h1>
->>>>>>> origin/feature/mh
+                    <h1><a :href="'/info/company?companyId='+this.companyId" >{{ companyName }}</a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
                         <p>行业：{{ companyField }}</p>
@@ -52,8 +46,8 @@
                                 <div class="clear"></div>
                             </div>
                             <div class="bqbox">
-                                <div v-for="(item,index)   in tagSplit" :key="index">
-                                    <label >{{ item }}</label>
+                                <div v-for="(item, index)   in tagSplit" :key="index">
+                                    <label>{{ item }}</label>
                                 </div>
                                 <div class="clear"></div>
                             </div>
@@ -69,11 +63,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_2">
-<<<<<<< HEAD
-                        <button :class="applyButtonClass" @click="apply">{{ applyStatus }}</button>
-=======
-                        <div @click="applyForRecruit()" class="divJob_2_1">立即申请</div>
->>>>>>> origin/feature/mh
+                    <button :class="applyButtonClass" @click="applyForRecruit">{{ applyStatus }}</button>
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_3">
@@ -95,13 +85,14 @@
         </div>
     </div>
 </template>
-<<<<<<< HEAD
 <script>
 import axios, { Axios } from 'axios';
 import Cookies from 'js-cookie';
 export default {
     data() {
         return {
+            isLogin: false,
+
             companyIcon: "",//企业图标
             companyName: "",//企业名称
             companyType: "",//企业性质
@@ -110,6 +101,7 @@ export default {
             companyHome: "",//企业主页
             companyAddress: "",//企业地址
             companyText: "",//企业介绍
+            companyId:"",
 
             recruitName: "",//职位名称
             recruitTag: "",//招聘标签
@@ -123,54 +115,62 @@ export default {
             recruitTime: "",//更新时间
             recruitTextDuty: "",//岗位职责
             recruitTextNeed: "",//岗位要求
-            applyStatus:"立即申请",
-            applyButtonClass:"divJob_2_1",
-            cookieValue:""
+            applyStatus: "立即申请",
+            applyButtonClass: "divJob_2_1",
+            cookieValue: ""
         }
     },
     methods: {
+        applyForRecruit() {
+            let that = this;
+            const cookieValue = Cookies.get('cookieUserId');
+            if (!this.isLogin) {
+                alert("请先登陆再进行申请！")
+            } else {
+                //用户申请职位逻辑写于此
+                axios({
+                method: "post",
+                url: '/api/apply',
+                data: {
+                    userId: cookieValue,
+                    companyId: that.companyId,
+                    recruitId: that.recruitId
+                }
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 300001) {
+                        console.log(data)
+                        alert(msg)
+                        that.applyStatus = "已申请"
+                        that.applyButtonClass = "divJob_2_0"
+                    } else {
+                        console.log(data)
+                        alert(msg)
+                    }
+                })
+
+            }
+        },
         formatRecruitText(text) {
             return text.replace(/\n/g, '<br>');
         },
-        /* 申请职位方法 */
-        apply(){
-            let that = this;
-            const cookieValue = Cookies.get('cookieUserId');
-            axios({
-                method:"post",
-                url:'/api/apply',
-                data:{
-                    userId:cookieValue,
-                    companyId:200001,
-                    recruitId:300001
-                }
-            })
-            .then(response =>{
-                let data = response.data
-                let code = data.code
-                let msg = data.msg
-                let info = data.object
-                if (code === 300001) {
-                    console.log(data)
-                    alert(msg)
-                    that.applyStatus = "已申请"
-                    that.applyButtonClass = "divJob_2_0"
-                }else{
-                    console.log(data)
-                    alert(msg)
-                }
-            })
-        }
     },
     mounted() {
-        let that = this; 
-        var companyId =this.$route.query.companyId
-        var recruitId =this.$route.query.recruitId
-        var userId =this.$route.query.userId
+        if (this.$cookie.get('cookieUserName') != null && this.$cookie.get('cookieUserName') != "") {
+            this.isLogin = true
+        }
+        let that = this;
+        this.companyId = this.$route.query.companyId
+        this.recruitId = this.$route.query.recruitId
+        var userId = this.$route.query.userId
         this.cookieValue = Cookies.get('cookieUserId');
         axios({
             method: 'GET',
-            url: '/api/company/getCompanyInfo/'+companyId //你的后端路径
+            url: '/api/company/getCompanyInfo/' + that.companyId //你的后端路径
         })
             .then(response => {
                 let data = response.data
@@ -194,40 +194,41 @@ export default {
                 console.log('错误', error.message)
                 // alert(error.message)
             }),
-        axios({
-            method: 'GET',
-            url: '/api/recruit/getRecruitInfo/'+companyId+'/'+recruitId+'/'+that.cookieValue
-        })
-            .then(response => {
-                let data = response.data
-                let code = data.code
-                let msg = data.msg
-                let info = data.object
-                if (code === 200001) { //判断你的请求是否成功
-                    console.log(data)
-                    that.recruitName = info.recruitName
-                    that.recruitTag = info.recruitTag
-                    that.recruitAddress = info.recruitAddress
-                    that.salary = info.recruitSalaryMin + "K-" + info.recruitSalaryMax + "K[参考工资]"
-                    that.recruitNumber = info.recruitNumber
-                    that.recruitDegree = info.recruitDegree
-                    that.recruitAge = info.recruitAge
-                    that.recruitExp = info.recruitExp
-                    that.recruitType = info.recruitType
-                    that.recruitTime = new Date(info.recruitTime)
-                    that.recruitTextDuty = info.recruitTextDuty
-                    that.recruitTextNeed = info.recruitTextNeed
-                    if (info.userId != null) {
-                        that.applyStatus = "已申请"
-                        that.applyButtonClass = "divJob_2_0"
-                    }
-                } else {
-                    alert(msg)
-                }
-            }, error => {
-                console.log('错误', error.message)
-                // alert(error.message)
+            axios({
+                method: 'GET',
+                url: '/api/recruit/getRecruitInfo/' + that.companyId + '/' + that.recruitId + '/' + that.cookieValue
             })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 200001) { //判断你的请求是否成功
+                        console.log(data)
+                        that.recruitName = info.recruitName
+                        that.recruitTag = info.recruitTag
+                        that.recruitAddress = info.recruitAddress
+                        that.salary = info.recruitSalaryMin + "K-" + info.recruitSalaryMax + "K[参考工资]"
+                        that.recruitNumber = info.recruitNumber
+                        that.recruitDegree = info.recruitDegree
+                        that.recruitAge = info.recruitAge
+                        that.recruitExp = info.recruitExp
+                        that.recruitType = info.recruitType
+                        that.recruitTime = new Date(info.recruitTime)
+                        that.recruitTextDuty = info.recruitTextDuty
+                        that.recruitTextNeed = info.recruitTextNeed
+                        if (info.userId != null) {
+                            that.applyStatus = "已申请"
+                            that.applyButtonClass = "divJob_2_0"
+                        }
+                    } else {
+                        alert(msg)
+                    }
+                }, error => {
+                    console.log('错误', error.message)
+                    // alert(error.message)
+                })
+        
     },
     computed: {
         formattedDate() {
@@ -241,34 +242,3 @@ export default {
     },
 }
 </script>
-=======
-
-<script>
-// partly edit by JoneElmo  10-29
-
-import axios from 'axios'
-export default {
-    data() {
-        return {
-            isLogin: false,
-        }
-    },
-    methods: {
-        applyForRecruit() {
-            if(!this.isLogin){
-                alert("请先登陆再进行申请！")
-            }else{
-                //用户申请职位逻辑写于此
-
-
-            }
-        }
-    },
-    mounted() {
-        if (this.$cookie.get('userName') != null && this.$cookie.get('userName') != "") {
-            this.isLogin = true
-        }
-    }
-}
-</script>
->>>>>>> origin/feature/mh

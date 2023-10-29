@@ -436,7 +436,6 @@ export default {
         getPhoneOrEmail() {
             let that = this;
             let cookieValue = Cookies.get('cookieUserId');
-            alert(cookieValue)
             axios({
                 method: 'GET',
                 url: '/api/user-info/getPhoneOrEmail/'+cookieValue //你的后端路径

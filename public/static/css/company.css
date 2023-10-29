@@ -65,6 +65,7 @@ body{ width:100%; min-width:1200px; margin:0 auto; font-size:12px; font-family:"
 .compcontent .comcontentL #contentcompany .zhiwei .zhiweiL .zw3{overflow:hidden; white-space:nowrap;text-overflow:ellipsis;line-height: 30px;height: 30px;}
 .compcontent .comcontentL #contentcompany .zhiwei .zhiweiR{ width:166px; float:left;border-bottom: 1px solid #E2E5E9;height: 155px; text-align:center; margin-top:10px}
 .compcontent .comcontentL #contentcompany .zhiwei .zhiweiR a{ display:inline-block;background: #50BA8C;width: 100px;height: 36px;cursor: pointer;border: none;color: #fff;font-size: 14px;font-family: "微软雅黑";font-weight: bold;border-radius: 5px; line-height:36px; margin-top:43px;}
+.compcontent .comcontentL #contentcompany .zhiwei .zhiweiR .ysq{ display:inline-block;background: #6c7676;width: 100px;height: 36px;cursor: pointer;border: none;color: #fff;font-size: 14px;font-family: "微软雅黑";font-weight: bold;border-radius: 5px; line-height:36px; margin-top:43px;}
 .compcontent .comcontentL #contentcompany .zhiwei .zhiweiR span{display:inline-block; background:url(../images/42.png) no-repeat;height: 30px;line-height: 30px;text-align: left;padding-left: 25px;margin-top: 15px;color: #666666;}
 
 .compcontent .comcontentR{width: 240px;float: right;}

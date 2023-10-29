@@ -13,7 +13,7 @@
                         <span class="ygz" @click="unfollow" v-if="!followStatus">已关注</span>
                     </div>
                     <p>{{ companyType }} | {{ companyScale }} | {{ companyField }}</p>
-                    <p><a href=#>{{ companyHome }}</a></p>
+                    <p><a href="http://www.baidu.com">{{ companyHome }}</a></p>
                     <p>{{ companyAddress }}</p>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                         <div class="zhiwei" v-for="item in arr" :key="item.recruitId">
                             <div class="zhiweiL">
                                 <div class="zw1">
-                                    <a href="/info">{{ item.recruitName }}</a>
+                                    <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a>
                                     <span>[{{ item.recruitAddress }}]</span>
                                 </div>
                                 <div class="zw2">
@@ -53,9 +53,9 @@
                                 </div>
                             </div>
                             <div class="zhiweiR">
-                                <a href=# @click="apply(item)">{{ item.userId == null ? '立即申请' : '已申请' }}</a>
+                                <a href=# :class="{'ysq':item.userId != null}" @click="apply(item)">{{ item.userId == null ? '立即申请' : '已申请' }}</a>
                             </div>
-                        </div>
+                        </div>  
                     </ul>
                 </div>
             </div>
@@ -177,6 +177,7 @@ export default {
         let companyId = this.$route.query.companyId
         let that = this;
         const cookieValue = Cookies.get('cookieUserId');
+        /* 获取企业信息 */
         axios({
             method: 'GET',
             url: '/api/company/getCompanyInfo/' + companyId //你的后端路径
