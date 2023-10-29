@@ -64,16 +64,16 @@
                     <tbody v-for="(item, index) in recruitList" :key="index">
                         <tr>
                             <td>
-                                <a href="/info" class="jobname">{{ item.recruitName }}</a>
+                                <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId" class="jobname">{{ item.recruitName }}</a>
                             </td>
                             <td>
                                 <div class="company">
-                                    <a href="/info/company">{{ item.companyName }}</a>
+                                    <a :href="'/info/company?companyId='+item.companyId" >{{ item.companyName }}</a>
                                 </div>
                             </td>
                             <td></td>
                             <td>{{ item.recruitAddress }}</td>
-                            <td><span>{{ item.recruitSalaryMin }} - {{ item.recruitSalaryMax }}</span></td>
+                            <td><span>{{ item.recruitSalaryMin }}k - {{ item.recruitSalaryMax }}k</span></td>
                             <td>{{ new Date(item.recruitTime).toLocaleString() }}</td>
                         </tr>
                         <tr class="xxdetail" :class="{ none: isNone }">
@@ -85,7 +85,7 @@
                             </td>
                             <td>
                                 <div class="applydiv">
-                                    <a href="javascript:void(0);" class="ysqbtn">已申请</a>
+                                    <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId" @click="apply(item)" :class="{'ljsqbtn':item.userId == null,'ysqbtn':item.userId != null}">{{ item.userId == null ? '立即申请' : '已申请' }}</a>
                                 </div>
                             </td>
                         </tr>

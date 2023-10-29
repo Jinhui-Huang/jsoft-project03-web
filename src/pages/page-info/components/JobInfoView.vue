@@ -23,18 +23,16 @@
         <div class="jobtypeBox">
             <div class="DivLeft">
                 <div class="DivCompany">
-                    <div class="DivCompany_img"><img :src="require('@/../dist/static/images/company.gif')" width="180" />
-                    </div>
-                    <h1><a href="/info/company">广州市***信息技术有限公司</a><img src="/static/images/16.png" /></h1>
+                    <div class="DivCompany_img"><img :src="companyIcon" width="180" /></div>
+                    <h1><a :href="'/info/company?companyId='+this.companyId" >{{ companyName }}</a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
-                        <p>行业：计算机硬件</p>
-                        <p>性质：私营企业</p>
-                        <p>规模：少于50人</p>
-                        <p>企业主页：<a href="">http://www.**********.com</a></p>
-                        <p>详细地址：广东广州越秀区***********</p>
-                        <p>广州市***信息技术有限公司是专业生产教学仪器设备和办公设备的企业，致力于计算机网络工程、电化教学设备、实验室成套设备及实验器材、多功能会议系统及智能公共广播系统、办公自动化、楼宇自动化（智能大厦/小区）、数字网络监控及防盗报警系统、体育用品的设计及集成，提供相关方面的技术咨询和服务。
-                        </p>
+                        <p>行业：{{ companyField }}</p>
+                        <p>性质：{{ companyType }}</p>
+                        <p>规模：{{ companyScale }}</p>
+                        <p>企业主页：<a href="">{{ companyHome }}</a></p>
+                        <p>详细地址：{{ companyAddress }}</p>
+                        <p>{{ companyText }}</p>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -44,86 +42,124 @@
                     <div class="divJob_1">
                         <div class="divJob_l">
                             <div class="tit">
-                                <h2>工程安装人员</h2>
+                                <h2>{{ recruitName }}</h2>
                                 <div class="clear"></div>
                             </div>
                             <div class="bqbox">
-                                <label>年终奖</label>
-                                <label>节日福利</label>
-                                <label>双休</label>
-                                <label>8小时工作制</label>
-                                <label>带薪年假</label>
-                                <label>交通补贴</label>
+                                <div v-for="(item, index)   in tagSplit" :key="index">
+                                    <label>{{ item }}</label>
+                                </div>
                                 <div class="clear"></div>
                             </div>
-                            <div class="jobsub">工作地点： 广东广州越秀区</div>
-                            <div class="jobsub">职位月薪： 3K -4K [参考工资]</div>
-                            <div class="jobsub">招聘人数： 2人</div>
-                            <div class="jobsub">最低学历： 大专</div>
-                            <div class="jobsub">年龄要求： 不限</div>
-                            <div class="jobsub">工作经验： 不限</div>
-                            <div class="jobsub">招聘方式： 全职</div>
-                            <div class="jobsub">刷新日期： 2小时</div>
+                            <div class="jobsub">工作地点： {{ recruitAddress }}</div>
+                            <div class="jobsub">职位月薪： {{ salary }}</div>
+                            <div class="jobsub">招聘人数： {{ recruitNumber }}人</div>
+                            <div class="jobsub">最低学历： {{ recruitDegree }}</div>
+                            <div class="jobsub">年龄要求： {{ recruitAge }}</div>
+                            <div class="jobsub">工作经验： {{ recruitExp }}</div>
+                            <div class="jobsub">招聘方式： {{ recruitType }}</div>
+                            <div class="jobsub">刷新日期：{{ formattedDate }}</div>
                         </div>
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_2">
-                        <div @click="applyForRecruit()" class="divJob_2_1">立即申请</div>
+                    <button :class="applyButtonClass" @click="applyForRecruit">{{ applyStatus }}</button>
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_3">
                         <b>岗位职责：</b><br />
                         <div class="con">
-                            1、执行公司的贸易业务，实施贸易规程，开拓市场；<br />
-                            2、负责联系客户、编制报价、参与商务谈判，签订合同；<br />
-                            3、负责生产跟踪、发货、现场监装；<br />
-                            4、负责单证审核、报关、结算、售后服务等工作；<br />
-                            5、客户的拓展与维护；<br />
-                            6、业务相关资料的整理和归档；<br />
-                            7、相关业务工作的汇报。
+                            <div v-html="formatRecruitText(recruitTextDuty)"></div>
                         </div>
                         <b>岗位要求：</b><br />
                         <div class="con">
-                            1、大专及以上学历，国际贸易、商务英语类相关专业；<br />
-                            2、2年以上贸易领域业务操作经验，有外企工作经历者优先考虑；<br />
-                            3、熟悉贸易操作流程及相关法律法规，具备贸易领域专业知识；<br />
-                            4、具有较高的英语水平，较好的计算机操作水平，有报关证等相关贸易操作证书者优先考虑；<br />
-                            5、具有良好的业务拓展能力和商务谈判技巧，公关意识强，具有较强的事业心、团队合作精神和独立处事能力，勇于开拓和创新。
+                            <div v-html="formatRecruitText(recruitTextNeed)"></div>
                         </div>
                     </div>
                     <div class="clear"></div>
                 </div>
             </div>
         </div>
-
         <div class="clear"></div>
         <div class="footer">
         </div>
     </div>
 </template>
-
 <script>
-// partly edit by JoneElmo  10-29
-
-import axios from 'axios'
+import axios, { Axios } from 'axios';
+import Cookies from 'js-cookie';
 export default {
     data() {
         return {
             isLogin: false,
 
             username:"",
+
+            companyIcon: "",//企业图标
+            companyName: "",//企业名称
+            companyType: "",//企业性质
+            companyField: "",//企业行业
+            companyScale: "",//企业规模
+            companyHome: "",//企业主页
+            companyAddress: "",//企业地址
+            companyText: "",//企业介绍
+            companyId:"",
+
+            recruitName: "",//职位名称
+            recruitTag: "",//招聘标签
+            recruitAddress: "",//职位地址
+            salary: "",//薪水
+            recruitNumber: "",//招聘人数
+            recruitDegree: "",//招聘学历
+            recruitAge: "",//招聘年龄
+            recruitExp: "",//工作经验
+            recruitType: "",//招聘方式
+            recruitTime: "",//更新时间
+            recruitTextDuty: "",//岗位职责
+            recruitTextNeed: "",//岗位要求
+            applyStatus: "立即申请",
+            applyButtonClass: "divJob_2_1",
+            cookieValue: ""
         }
     },
     methods: {
         applyForRecruit() {
-            if(!this.isLogin){
+            let that = this;
+            const cookieValue = Cookies.get('cookieUserId');
+            if (!this.isLogin) {
                 alert("请先登陆再进行申请！")
-            }else{
+            } else {
                 //用户申请职位逻辑写于此
-
+                axios({
+                method: "post",
+                url: '/api/apply',
+                data: {
+                    userId: cookieValue,
+                    companyId: that.companyId,
+                    recruitId: that.recruitId
+                }
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 300001) {
+                        console.log(data)
+                        alert(msg)
+                        that.applyStatus = "已申请"
+                        that.applyButtonClass = "divJob_2_0"
+                    } else {
+                        console.log(data)
+                        alert(msg)
+                    }
+                })
 
             }
-        }
+        },
+        formatRecruitText(text) {
+            return text.replace(/\n/g, '<br>');
+        },
     },
     mounted() {
         if (this.$cookie.get('cookieUserName') != null && this.$cookie.get('cookieUserName') != "") {
@@ -135,6 +171,82 @@ export default {
         }
 
         this.username = this.$cookie.get("cookieUserName")
-    }
+        let that = this;
+        this.companyId = this.$route.query.companyId
+        this.recruitId = this.$route.query.recruitId
+        var userId = this.$route.query.userId
+        this.cookieValue = Cookies.get('cookieUserId');
+        axios({
+            method: 'GET',
+            url: '/api/company/getCompanyInfo/' + that.companyId //你的后端路径
+        })
+            .then(response => {
+                let data = response.data
+                let code = data.code
+                let msg = data.msg
+                let info = data.object
+                if (code === 200001) { //判断你的请求是否成功
+                    console.log(data)
+                    that.companyIcon = require('@/../dist/static/images/' + info.companyIcon)
+                    that.companyName = info.companyName
+                    that.companyType = info.companyType
+                    that.companyField = info.companyField
+                    that.companyScale = info.companyScale
+                    that.companyHome = info.companyHome
+                    that.companyAddress = info.companyAddress
+                    that.companyText = info.companyText
+                } else {
+                    alert(msg)
+                }
+            }, error => {
+                console.log('错误', error.message)
+                // alert(error.message)
+            }),
+            axios({
+                method: 'GET',
+                url: '/api/recruit/getRecruitInfo/' + that.companyId + '/' + that.recruitId + '/' + that.cookieValue
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 200001) { //判断你的请求是否成功
+                        console.log(data)
+                        that.recruitName = info.recruitName
+                        that.recruitTag = info.recruitTag
+                        that.recruitAddress = info.recruitAddress
+                        that.salary = info.recruitSalaryMin + "K-" + info.recruitSalaryMax + "K[参考工资]"
+                        that.recruitNumber = info.recruitNumber
+                        that.recruitDegree = info.recruitDegree
+                        that.recruitAge = info.recruitAge
+                        that.recruitExp = info.recruitExp
+                        that.recruitType = info.recruitType
+                        that.recruitTime = new Date(info.recruitTime)
+                        that.recruitTextDuty = info.recruitTextDuty
+                        that.recruitTextNeed = info.recruitTextNeed
+                        if (info.userId != null) {
+                            that.applyStatus = "已申请"
+                            that.applyButtonClass = "divJob_2_0"
+                        }
+                    } else {
+                        alert(msg)
+                    }
+                }, error => {
+                    console.log('错误', error.message)
+                    // alert(error.message)
+                })
+        
+    },
+    computed: {
+        formattedDate() {
+            const date = new Date(this.recruitTime);
+            return date.toLocaleString();
+        },
+        tagSplit() {
+            const tags = this.recruitTag.split("#")
+            return tags;
+        }
+    },
 }
 </script>

@@ -3,17 +3,18 @@
         <div class="compMain">
             <div class="main">
                 <div class="CpLogo">
-                    <img src="/static/images/company.gif" />
+                    <img :src="companyIcon" />
                 </div>
                 <div class="CpDetail">
                     <div class="CompanyName">
-                        <span class="title">广州市***信息技术有限公司</span>
+                        <span class="title">{{ companyName }}</span>
                         <img src="/static/images/16.png" />
-                        <span class="guanzhu">+ 关注</span>
+                        <span class="guanzhu" @click="follow" v-if="followStatus">+ 关注</span>
+                        <span class="ygz" @click="unfollow" v-if="!followStatus">已关注</span>
                     </div>
-                    <p>私营企业 | 少于50人 | 计算机硬件</p>
-                    <p><a href="">http://www.**********.com</a></p>
-                    <p>广东广州越秀区xxxxxxxxxxxxxxx</p>
+                    <p>{{ companyType }} | {{ companyScale }} | {{ companyField }}</p>
+                    <p><a href="http://www.baidu.com">{{ companyHome }}</a></p>
+                    <p>{{ companyAddress }}</p>
                 </div>
             </div>
         </div>
@@ -28,36 +29,33 @@
                 <div id="contentcompany">
                     <ul :style="status1">
                         <div class="conts">
-                            <p>广州市***信息技术有限公司是专业生产教学仪器设备和办公设备的企业，致力于计算机网络工程、电化教学设备、实验室成套设备及实验器材、多功能会议系统及智能公共广播系统、办公自动化、楼宇自动化（智能大厦/小区）、数字网络监控及防盗报警系统、体育用品的设计及集成，提供相关方面的技术咨询和服务。
-                            </p>
-                            <p>本公司拥有一支精诚团结的高水平的工程技术服务队伍，汇聚了计算机工程、电化教学、实验室设备、多媒体技术、自动控制及办公自动化、体育设施等专业的优秀人才，同时与中国科学院广州分院及众多高等院校、产品制造商建立了长期的合作关系，具有丰富的工程经验及雄厚的技术力量。
-                            </p>
-                            <p>公司奉行"面向现代化、开发新产品、服务教育界"的企业宗旨，坚持以优良的产品，完善的服务，合理的价格满足各类学校的需要。为此公司不断跟踪国内外发展动态，加强新产品的研发工作，现有多媒体语言学习系统、多功能电教室、物理、化学、生物、劳技、音乐等全套现代化实验室设备、教学仪器、电子产品、体育用品等，产品经质量技术监督局检验全部合格。
-                            </p>
-                            <p>您的要求是我们的标准，您的满意是我们的追求。在瞬息万变、科技突飞猛进的今天，本公司将一如既往地坚持"创新、诚信、团结、敬业、高质、高效"的原则，秉承"启迪新思维，创建新世纪"的发展思路，"以诚为本"理念，凭借卓越的技术力量和高质量的服务，不断开拓创新，为您提供更新、更先进、更完善的全方位产品和技术服务，赢得您对我们的信赖。
+                            <p>{{ companyText }}
                             </p>
                         </div>
                     </ul>
                     <ul :style="status2">
-                        <div class="zhiwei" v-for="item in arr" :key="item" >
+                        <div class="zhiwei" v-for="item in arr" :key="item.recruitId">
                             <div class="zhiweiL">
                                 <div class="zw1">
-                                    <a href="/info">工程安装人员</a>
-                                    <span>[广东广州越秀区]</span>
+                                    <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a>
+                                    <span>[{{ item.recruitAddress }}]</span>
                                 </div>
                                 <div class="zw2">
-                                    <span class="red">月薪3K-4K</span> | 招聘2人 | 全职 | 年龄不限 | 经验不限 | 2017-12-05刷新
+                                    <span class="red">月薪{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax }}K</span> |
+                                    招聘{{ item.recruitNumber }}人 | {{ item.recruitType }} | {{ item.recruitAge }} | {{
+                                        item.recruitExp }} | {{ new Date(item.recruitTime).toLocaleString() }}刷新
                                 </div>
                                 <div class="zw3">
-                                    岗位职责：1.中职以上学历，懂计算机应用，能经常出差到外地做现场施工及维护工作：2.吃苦耐劳，有一定的社会经验和良好的社交能力、有耐心、能够长期稳定的做好工作；3.工作认真
+                                    岗位职责： {{ item.recruitTextDuty }}
                                 </div>
                                 <div class="zw3">
-                                    岗位要求：1年龄不限，有良好工作态度，为人诚实可靠　，能够长期稳定做好工作。2、一年以上同等岗位工作经验；应届生可接收3、熟悉电脑基本操作，懂计算...</div>
+                                    岗位要求： {{ item.recruitTextNeed }}
+                                </div>
                             </div>
                             <div class="zhiweiR">
-                                <a href="">立即申请</a>
+                                <a href=# :class="{'ysq':item.userId != null}" @click="apply(item)">{{ item.userId == null ? '立即申请' : '已申请' }}</a>
                             </div>
-                        </div>
+                        </div>  
                     </ul>
                 </div>
             </div>
@@ -69,27 +67,189 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
+import Cookies from 'js-cookie';
 export default {
     data() {
         return {
-            arr: new Array(8),
+            arr: "",
             isActive: true,
             status1: "display: block",
-            status2: "display: none"
+            status2: "display: none",
+            companyIcon: "",//企业图标
+            companyName: "",//企业名称
+            companyType: "",//企业性质
+            companyField: "",//企业行业
+            companyScale: "",//企业规模
+            companyHome: "",//企业主页
+            companyAddress: "",//企业地址
+            companyText: "",//企业介绍
+            followStatus: true,
+            followButtonClass: "guanzhu"
         }
     },
     methods: {
         show(i) {
-            if(i == 1) {
+            if (i == 1) {
                 this.isActive = true
                 this.status1 = "display:block"
                 this.status2 = "display: none"
-            } else { 
+            } else {
                 this.isActive = false
                 this.status2 = "display:block"
                 this.status1 = "display: none"
             }
+        },
+        /* 申请职位方法 */
+        apply(item) {
+            let that = this;
+            const cookieValue = Cookies.get('cookieUserId');
+            axios({
+                method: "post",
+                url: '/api/apply',
+                data: {
+                    userId: cookieValue,
+                    companyId: item.companyId,
+                    recruitId: item.recruitId
+                }
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    if (code === 300001) {
+                        console.log(data)
+                        item.userId = ""
+                        alert(msg)
+                    } else {
+                        console.log(data)
+                        alert(msg)
+                    }
+                })
+        },
+        /* 关注企业的方法 */
+        follow() {
+            let that = this;
+            let companyId = this.$route.query.companyId;
+            let cookieValue = Cookies.get('cookieUserId');
+            axios({
+                method: "get",
+                url: '/api/follow/followCompany/'+companyId+'/'+cookieValue,
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    if (code === 100001) {
+                        console.log(data)
+                        alert(msg)
+                        that.followStatus = false
+                    } else {
+                        console.log(data)
+                        alert(msg)
+                    }
+                })
+        },
+        unfollow() {
+            let that = this
+            let companyId = this.$route.query.companyId;
+            let cookieValue = Cookies.get('cookieUserId');
+            axios({
+                method: "get",
+                url: '/api/follow/unfollowCompany/'+companyId+'/'+cookieValue,
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    if (code === 100001) {
+                        console.log(data)
+                        alert(msg)
+                        that.followStatus = true
+                    } else {
+                        console.log(data)
+                        alert(msg)
+                    }
+                })
         }
-    }
+    },
+    mounted() {
+        let companyId = this.$route.query.companyId
+        let that = this;
+        const cookieValue = Cookies.get('cookieUserId');
+        /* 获取企业信息 */
+        axios({
+            method: 'GET',
+            url: '/api/company/getCompanyInfo/' + companyId //你的后端路径
+        })
+            .then(response => {
+                let data = response.data
+                let code = data.code
+                let msg = data.msg
+                let info = data.object
+                if (code === 200001) { //判断你的请求是否成功
+                    console.log(data)
+                    that.companyIcon = require('@/../dist/static/images/' + info.companyIcon)
+                    that.companyName = info.companyName
+                    that.companyType = info.companyType
+                    that.companyField = info.companyField
+                    that.companyScale = info.companyScale
+                    that.companyHome = info.companyHome
+                    that.companyAddress = info.companyAddress
+                    that.companyText = info.companyText
+                } else {
+                    alert(msg)
+                }
+            }, error => {
+                console.log('错误', error.message)
+                // alert(error.message)
+            }),
+            /* 获取企业下所有招聘信息 */
+            axios({
+                method: 'GET',
+                url: '/api/company/getCompanyRecruit/' + companyId + '/' + cookieValue //你的后端路径
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 200001) { //判断你的请求是否成功
+                        console.log(data)
+                        that.arr = info
+                    } else {
+                        alert(msg)
+                    }
+                }, error => {
+                    console.log('错误', error.message)
+                    // alert(error.message)
+                }),
+                /* 判断企业是否被关注 */
+                axios({
+                method: 'GET',
+                url: '/api/follow/checkFollowStatus/' + companyId + '/' + cookieValue 
+            })
+                .then(response => {
+                    let data = response.data
+                    let code = data.code
+                    let msg = data.msg
+                    let info = data.object
+                    if (code === 100001) { 
+                        console.log(data)
+                        that.followStatus = false
+                    } else {
+                        console.log(data)
+                    }
+                }, error => {
+                    console.log('错误', error.message)
+                    // alert(error.message)
+                })
+    },
+    computed: {
+        formattedDate() {
+            const date = new Date(this.recruitTime);
+            return date.toLocaleString();
+        },
+    },
 }
 </script>

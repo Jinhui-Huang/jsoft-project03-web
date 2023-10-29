@@ -149,13 +149,13 @@
                 </div>
                 <div class="clear"></div>
                 <div class="highMoney">
-                    <div v-for="item in arr" :key="item">
+                    <div v-for="item in HighRecruitList" :key="item.companyId+'-'+item.recruitId">
                         <div class="lineBox"></div>
                         <div class="divBox">
-                            <a href="/info"><img src="/static/images/18.gif" width="84" /></a>
-                            <p class="tit"><a href="/info">橱柜设计</a></p>
-                            <p class="sub"><a href="/info/company">深圳维意定制家居用品有限公司</a></p>
-                            <p class="num"><span>8K-10K</span></p>
+                            <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId" ><img :src="'/static/images/'+item.company.companyIcon" width="84" /></a>
+                            <p class="tit"><a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a></p>
+                            <p class="sub"><a :href="'/info/company?companyId='+item.companyId" >{{item.companyName}}</a></p>
+                            <p class="num"><span>{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax}}K</span></p>
                         </div>
                     </div>
                 </div>
@@ -192,6 +192,8 @@ export default {
             isLogin: false,
             //模糊查询关键字
             word: "",
+
+            HighRecruitList:"",
             // 领域列表 每一行的信息
             fields1:[],
             fields2:[],
