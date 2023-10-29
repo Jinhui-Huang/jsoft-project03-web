@@ -133,6 +133,10 @@
                                 <span class="bigFont">用户名：</span>{{ userName }} <br />
                                 <span class="bigFont">手机号：</span>{{ phone }} <br />
                                 <span class="bigFont">邮箱：</span>{{ userEmail }} <br />
+                                <br>
+                                <a href="/login/resume" class="a1">一分钟填写简历</a>
+                                <br>
+                                <br>
                                 <a @click="logOut()" href="#">退出登陆</a>
                             </div>
 
