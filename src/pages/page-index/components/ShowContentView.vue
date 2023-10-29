@@ -148,13 +148,13 @@
                 </div>
                 <div class="clear"></div>
                 <div class="highMoney">
-                    <div v-for="item in arr" :key="item">
+                    <div v-for="item in HighRecruitList" :key="item.companyId+'-'+item.recruitId">
                         <div class="lineBox"></div>
                         <div class="divBox">
-                            <a href="/info"><img src="/static/images/18.gif" width="84" /></a>
-                            <p class="tit"><a href="/info">橱柜设计</a></p>
-                            <p class="sub"><a href="/info/company">深圳维意定制家居用品有限公司</a></p>
-                            <p class="num"><span>8K-10K</span></p>
+                            <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId" ><img :src="'/static/images/'+item.company.companyIcon" width="84" /></a>
+                            <p class="tit"><a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a></p>
+                            <p class="sub"><a :href="'/info/company?companyId='+item.companyId" >{{item.companyName}}</a></p>
+                            <p class="num"><span>{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax}}K</span></p>
                         </div>
                     </div>
                 </div>
@@ -186,12 +186,33 @@ export default {
             password: null,
             userName: null,
             code: null,
-            userId: null
+            userId: null,
+
+            HighRecruitList:""
         }
     },
     mounted(){
-       //判断用户是否登陆 
-       
+        axios({
+            method: 'GET',
+            url: '/api/recruit/getHighSalaryRecruit'
+        })
+            .then(response => {
+                let data = response.data
+                let code = data.code
+                let msg = data.msg
+                let info = data.object
+                if (code === 200001) { //判断你的请求是否成功
+                    console.log(data)
+                    this.HighRecruitList = info.list
+                    console.log(this.HighRecruitList)
+                } else {
+
+                    alert(msg)
+                }
+            }, error => {
+                console.log('错误', error.message)
+                // alert(error.message)
+            })
     },
     methods: {
         jumpSearchJob() {
