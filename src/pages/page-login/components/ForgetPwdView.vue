@@ -87,8 +87,8 @@
                 </div>
                 <div id="step_4" class="restInfo2" v-show="show_4">
                     <div class="SucTitle">恭喜您，您的密码设置成功！</div>
-                    <p>您的用户名是：HEB5_14@your_email.com</p>
-                    <p>您可以使用新密码登录蝶飞人才网<a href="/login">立即登录</a></p>
+                    <p>您的用户名是：{{ userName }}</p>
+                    <p>您可以使用新密码登录MYHD人才网<a href="/login">立即登录</a></p>
                 </div>
 
             </div>
@@ -295,7 +295,11 @@ export default {
                         alert("两次输入的密码不一致")
                         return
                     } else {
-                        this.setNewPassword()
+                        this.setNewPassword().then(function(result){
+                            if(result.data.code == "100001"){
+                                alert("修改成功")
+                            }
+                        })
                     }
                     this.show_3 = false
                     this.show_4 = true
