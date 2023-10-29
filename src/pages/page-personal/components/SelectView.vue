@@ -32,27 +32,27 @@
                                 <thead>
                                     <tr>
                                         <th width="24%" style="padding-left:17px">职位名称</th>
-                                        <th width="30%">企业名称</th>
+                                        <th width="20%">企业名称</th>
                                         <th width="9%"></th>
-                                        <th width="16%">工作地点</th>
-                                        <th width="8%">薪水</th>
-                                        <th width="9%">刷新时间</th>
+                                        <th width="10%">工作地点</th>
+                                        <th width="10%">薪水</th>
+                                        <th width="15%">刷新时间</th>
                                     </tr>
                                 </thead>
                                 <tbody v-for="item in arr" :key="item.recruitId">
                                     <tr>
                                         <td>
-                                            <a href="/info" class="jobname">后勤文员</a>
+                                            <a href="/info" class="jobname">{{ item.recruitName }}</a>
                                         </td>
                                         <td>
                                             <div class="company">
-                                                <a href="/info/company">河北同源科技发展有限公司</a>
+                                                <a :href="'/info/company?companyId='+item.companyId">{{ item.companyName }}</a>
                                             </div>
                                         </td>
                                         <td></td>
-                                        <td>河北佛山南海区</td>
-                                        <td><span>2.5K-3.5K</span></td>
-                                        <td>1小时</td>
+                                        <td>{{ item.recruitAddress }}</td>
+                                        <td><span>{{item.recruitSalaryMin }}K-{{item.recruitSalaryMax }}K</span></td>
+                                        <td>{{new Date(item.recruitTime).toLocaleString()}}</td>
                                     </tr>
                                     <tr class="xxdetail" :class="{ none: isNone }">
                                         <td colspan="5">
@@ -76,7 +76,7 @@
                         </div>
                         <div class="clear"></div>
                         <div class="listbottom">
-                            <div class="lb3"><span>共1141条 第1/39页</span></div>
+                            <div class="lb3"><span>共{{ this.dataTotal}}条 第{{ this.pageNum}}/{{ this.pageTotal}}页</span></div>
                         </div>
                         <div class="clear"></div>
                         <div class="fenyediv">
@@ -114,9 +114,13 @@ export default {
             isOn: true,
             isNone: true,
             userId:"",
+            dataTotal:"",//总数据条数
+            pageNum:1,//第几页
+            pageTotal:""//总几页
         }
     },
     methods: {
+        
         showOn(status) {
             if (status == 'list') {
                 this.isOn = true,
@@ -127,10 +131,11 @@ export default {
             }
         },
         getMyApplyRecruit(like,pageNum,userId){
+            let that = this
              /* 获取进入页面的申请职位信息 */
         axios({
             method: 'GET',
-            url: '/api/apply/getAllUserApply/'+like+'/'+pageNum+'/100001'
+            url: '/api/apply/getAllUserApply/'+like+'/'+pageNum+'/'+userId
         })
             .then(response => {
                 let data = response.data
@@ -140,7 +145,8 @@ export default {
                 if (code === 200001) { //判断你的请求是否成功
                     console.log(data)
                     this.arr = info.list
-                    console.log(this.arr)
+                    that.pageTotal = info.pages
+                    that.dataTotal = info.total
                 } else {
                     alert(msg)
                 }
@@ -152,7 +158,7 @@ export default {
     },
     mounted(){
         const cookieValue = Cookies.get('cookieUserId');
-        this.getMyApplyRecruit(null,1,cookieValue)
+        this.getMyApplyRecruit(null,this.pageNum,cookieValue)
     }
 }
 </script>
