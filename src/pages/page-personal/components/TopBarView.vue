@@ -7,11 +7,11 @@
                 <div class="Account">
                     <div class="Left">
                         <div class="Info">
-                            <font>[28421947]</font>
+                            <font>{{ userName }}</font>
                             <input type="button">
                             <div id="InfoPopup">
                                 <ul>
-                                    <li><a href="/index">退出</a></li>
+                                    <li><a @click="logOut()" href="/index">退出</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -27,3 +27,29 @@
         </div>
     </div>
 </template>
+<script>
+import Cookies from 'js-cookie';
+export default {
+    data () {
+        return {
+            userName:"",//用户名
+        }
+    },
+    mounted() {
+        this.userName = Cookies.get('cookieUserName');
+        
+
+    },
+    methods: {
+        logOut() {
+            // 获取所有Cookie的名称
+            const cookieNames = Object.keys(this.$cookie.get());
+            // 清空所有Cookie
+            cookieNames.forEach(cookieName => {
+                this.$cookie.remove(cookieName);
+            });
+            location.reload()
+        }
+    },
+}
+</script>

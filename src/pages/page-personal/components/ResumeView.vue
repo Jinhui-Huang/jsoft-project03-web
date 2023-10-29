@@ -430,7 +430,6 @@ export default {
                     }
                 }, error => {
                     console.log('错误', error.message)
-                    // alert(error.message)
                 })
         },
         getPhoneOrEmail() {
@@ -550,8 +549,8 @@ export default {
         }
     },
     mounted() {
-        let that = this;
         this.echoData();
+
     }
 }
 </script>
