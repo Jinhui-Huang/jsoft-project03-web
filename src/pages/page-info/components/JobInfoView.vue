@@ -24,7 +24,7 @@
             <div class="DivLeft">
                 <div class="DivCompany">
                     <div class="DivCompany_img"><img :src="companyIcon" width="180" /></div>
-                    <h1><a href="/info/company">{{ companyName }}</a><img src="/static/images/16.png" /></h1>
+                    <h1><a href="/info/company">    </a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
                         <p>行业：{{ companyField }}</p>
@@ -63,7 +63,6 @@
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_2">
-                        <!-- <div class="divJob_2_1"></div> -->
                         <button :class="applyButtonClass" @click="apply">{{ applyStatus }}</button>
                     </div>
                     <div class="clear"></div>
@@ -88,6 +87,7 @@
 </template>
 <script>
 import axios, { Axios } from 'axios';
+import Cookies from 'js-cookie';
 export default {
     data() {
         return {
@@ -113,7 +113,8 @@ export default {
             recruitTextDuty: "",//岗位职责
             recruitTextNeed: "",//岗位要求
             applyStatus:"立即申请",
-            applyButtonClass:"divJob_2_1"
+            applyButtonClass:"divJob_2_1",
+            cookieValue:""
         }
     },
     methods: {
@@ -123,11 +124,12 @@ export default {
         /* 申请职位方法 */
         apply(){
             let that = this;
+            const cookieValue = Cookies.get('cookieUserId');
             axios({
                 method:"post",
                 url:'/api/apply',
                 data:{
-                    userId:100001,
+                    userId:cookieValue,
                     companyId:200001,
                     recruitId:300001
                 }
@@ -150,10 +152,14 @@ export default {
         }
     },
     mounted() {
-        let that = this;
+        let that = this; 
+        var companyId =this.$route.query.companyId
+        var recruitId =this.$route.query.recruitId
+        var userId =this.$route.query.userId
+        this.cookieValue = Cookies.get('cookieUserId');
         axios({
             method: 'GET',
-            url: '/api/company/getCompanyInfo/200001' //你的后端路径
+            url: '/api/company/getCompanyInfo/'+companyId //你的后端路径
         })
             .then(response => {
                 let data = response.data
@@ -176,10 +182,10 @@ export default {
             }, error => {
                 console.log('错误', error.message)
                 // alert(error.message)
-            })
+            }),
         axios({
             method: 'GET',
-            url: '/api/recruit/getRecruitInfo/200001/300001/100001' //你的后端路径
+            url: '/api/recruit/getRecruitInfo/'+companyId+'/'+recruitId+'/'+that.cookieValue
         })
             .then(response => {
                 let data = response.data

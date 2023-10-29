@@ -263,6 +263,7 @@
 </template>
 <script>
 import axios from 'axios';
+import Cookies from 'js-cookie';
 export default {
     data() {
         return {
@@ -306,11 +307,7 @@ export default {
             showNot:false,
             showFull:false,
             showPart:false,
-            showPractice:false,
-
-
-
-
+            showPractice:false
         }
     },
     methods: {
@@ -349,9 +346,10 @@ export default {
         /* 数据回显 */
         echoData(){
             let that = this;
+            const cookieValue = Cookies.get('cookieUserId');
             axios({
                 method: 'GET',
-                url: '/api/user-info/getUserInfo/100004'
+                url: '/api/user-info/getUserInfo/'+cookieValue
             })
                 .then(response => {
                     let data = response.data
@@ -437,9 +435,11 @@ export default {
         },
         getPhoneOrEmail() {
             let that = this;
+            let cookieValue = Cookies.get('cookieUserId');
+            alert(cookieValue)
             axios({
                 method: 'GET',
-                url: '/api/user-info/getPhoneOrEmail/100004' //你的后端路径
+                url: '/api/user-info/getPhoneOrEmail/'+cookieValue //你的后端路径
             })
                 .then(response => {
                     let data = response.data
@@ -464,6 +464,7 @@ export default {
         },
         addUserInfo() {
             let that = this;
+            let cookieValue = Cookies.get('cookieUserId');
             if (
                 this.trueName != "" 
                 && this.birthday != ""
@@ -482,7 +483,7 @@ export default {
                     method: 'post',
                     url: '/api/user-info',
                     data: {
-                        userId: "100004",
+                        userId: cookieValue,
                         name: that.trueName,
                         gender: that.gender,
                         birthday: that.birthday,
