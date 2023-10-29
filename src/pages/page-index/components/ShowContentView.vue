@@ -30,37 +30,37 @@
                     <ul>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme1"><b></b>销售|市场|客服|贸易</span>
+                                <span class="itme1" ><b></b> <div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields1" :key="index">{{ item.filedName }} </div> </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme2"><b></b>经营管理|人事|行政|财务</span>
+                                <span class="itme2"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields2" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme3"><b></b>生产|质管|技工|物流</span>
+                                <span class="itme3"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields3" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme4"><b></b>教育|法律|咨询|翻译</span>
+                                <span class="itme4"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields4" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme5"><b></b>零售|家政|餐饮|旅游</span>
+                                <span class="itme5"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields5" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme6"><b></b>广告|媒体|艺术|出版</span>
+                                <span class="itme6"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields6" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme7"><b></b>IT|互联网|通信</span>
+                                <span class="itme7"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields7" :key="index">{{ item.filedName }} </div></span>
                             </div>
                         </div>
                     </ul>
@@ -191,36 +191,75 @@ export default {
 
             isLogin: false,
             //模糊查询关键字
-            word:"",
+            word: "",
+            // 领域列表 每一行的信息
+            fields1:[],
+            fields2:[],
+            fields3:[],
+            fields4:[],
+            fields5:[],
+            fields6:[],
+            fields7:[],
+            //点击领域后获取的值，将会传给后端做查询
+            jobFiled:null
+
         }
     },
     mounted() {
-        //判断用户是否登陆 
-        const userId = this.$cookie.get("cookieUserId")
-        const userEmail = this.$cookie.get("cookieUserEmail")
-        const userName = this.$cookie.get("cookieUserName")
-        const userPhone = this.$cookie.get("cookiePhone")
-        // console.log(userName+";"+userId+";"+userEmail+";"+userPhone)
-        console.log(this.$cookie.get())
-        if (userName != null && userName != "") {
-            console.log("用户已登陆")
-            this.isLogin = true
-            this.title = "个人信息"
-            this.isShow = false;
-            this.userName = userName
-            if (userPhone == null || userPhone == "") {
-                this.phone = "暂未绑定手机号"
-            } else {
-                this.phone = userPhone
-            }
-            if (userEmail == null || userEmail == "") {
-                this.userEmail = "暂未绑定邮箱"
-            } else {
-                this.userEmail = userEmail
-            }
-        }
+        this.init()
+        this.getJobFields()
     },
     methods: {
+        init() {
+            //判断用户是否登陆 
+            const userId = this.$cookie.get("cookieUserId")
+            const userEmail = this.$cookie.get("cookieUserEmail")
+            const userName = this.$cookie.get("cookieUserName")
+            const userPhone = this.$cookie.get("cookiePhone")
+            // console.log(userName+";"+userId+";"+userEmail+";"+userPhone)
+            console.log(this.$cookie.get())
+            if (userName != null && userName != "") {
+                console.log("用户已登陆")
+                this.isLogin = true
+                this.title = "个人信息"
+                this.isShow = false;
+                this.userName = userName
+                if (userPhone == null || userPhone == "") {
+                    this.phone = "暂未绑定手机号"
+                } else {
+                    this.phone = userPhone
+                }
+                if (userEmail == null || userEmail == "") {
+                    this.userEmail = "暂未绑定邮箱"
+                } else {
+                    this.userEmail = userEmail
+                }
+            }
+        },
+        handleItemClike(jobFiled){
+            console.log("获取到的工作领域是"+jobFiled)
+            this.jobFiled = jobFiled
+
+            window.location='/index/search?jobFiled=' + this.jobFiled;
+        },
+        getJobFields(){
+            let that = this
+            axios({
+                method: 'get',
+                url: '/api/recruit/get_fields',
+            })
+            .then(function (result){
+                console.log("获取到的领域列表信息：")
+                console.log(result.data.object)
+                that.fields1 = result.data.object[0]
+                that.fields2 = result.data.object[1]
+                that.fields3 = result.data.object[2]
+                that.fields4 = result.data.object[3]
+                that.fields5 = result.data.object[4]
+                that.fields6 = result.data.object[5]
+                that.fields7 = result.data.object[6]
+            })
+        },
         jumpUserCenter() {
             if (this.isLogin) {
                 window.location = '/personal/resume'
@@ -236,7 +275,7 @@ export default {
             }
         },
         jumpSearchJob() {
-            window.location = '/index/search?word='+this.word;
+            window.location = '/index/search?word=' + this.word;
         },
         getUserInfo() {  //获取用户详细信息
             console.log("进入getUserInfo方法")
@@ -338,5 +377,8 @@ export default {
 .bigFont {
     font-size: 15px;
     font-weight: bold;
+}
+.horizonal{
+    display: inline;
 }
 </style>

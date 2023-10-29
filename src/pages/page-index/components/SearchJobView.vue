@@ -148,7 +148,10 @@ export default {
             //当前页
             pageNum: 1,
             //页面数据量
-            pageSize: null
+            pageSize: null,
+
+            //快捷查询编号
+            jobFiled: null,
         }
     },
     methods: {
@@ -157,38 +160,45 @@ export default {
             // 获取数据
             axios({
                 method: 'get',
-                url: '/api/recruit/queryRecruitList?word=' + this.word + "&pageNum=" + this.pageNum
+                url: '/api/recruit/queryRecruitList?word=' + that.word + "&pageNum=" + that.pageNum
             })
                 .then(function (result) {
                     that.result = result
                     that.setPageInfo()
                 })
         },
+        async loadDataForPage2() {
+            let that = this
+            // 获取数据
+            axios({
+                method: 'get',
+                url: '/api/recruit/quickQueryRecruitList?jobFiled=' + that.jobFiled + "&pageNum=" + that.pageNum
+            })
+                .then(function (result) {
+                    that.result = result
+                    console.log(result.data.object)
+                    console.log(result.data.object.list)
+                    that.recruitList = result.data.object.list
+                    //注入分页信息
+                    that.total = result.data.object.total
+                    that.pages = result.data.object.pages
+                    that.prePage = result.data.object.prePage
+                    that.nextPage = result.data.object.nextPage
+                    that.pageSize = result.data.object.pageSize
+                })
+        },
         query() {
             // 模糊查询发送请求
-            if (this.word == null || this.word == "") {
-                let that = this
-                //获取全部数据
-                axios({
-                    method: 'get',
-                    url: '/api/recruit/queryRecruitList?word='+ that.word + "&pageNum=" + that.pageNum
+            let that = this
+            //获取全部数据
+            axios({
+                method: 'get',
+                url: '/api/recruit/queryRecruitList?word=' + that.word + "&pageNum=" + that.pageNum
+            })
+                .then(function (result) {
+                    that.result = result
+                    that.setPageInfo()
                 })
-                    .then(function (result) {
-                        that.result = result
-                        that.setPageInfo()
-                    })
-            } else {
-                let that = this
-                //根据关键字获取数据
-                axios({
-                    method: 'get',
-                    url: '/api/recruit/queryRecruitList?word=' + that.word + "&pageNum=" + that.pageNum
-                })
-                    .then(function (result) {
-                        that.result = result
-                        that.setPageInfo()
-                    })
-            }
         },
         // 跳转到第一页
         async goToFirstPage() {
@@ -212,8 +222,16 @@ export default {
         },
         async goToPage(page) {
             this.pageNum = page
-            console.log(this.pageNum)
-            await this.loadDataForPage(this.pageNum)
+            console.log("切换的页码是" + this.pageNum)
+            console.log("总页码数量是" + this.pages)
+            console.log("切换页码工作领域的值为" + this.jobFiled)
+            if (this.jobFiled == null) {
+                console.log("走loadDataForPage")
+                await this.loadDataForPage(this.pageNum)
+            } else {
+                console.log("走loadDataForPage2")
+                await this.loadDataForPage2(this.pageNum)
+            }
         },
         setPageInfo() {
             console.log("接收到的数据信息：")
@@ -245,11 +263,25 @@ export default {
                 this.isOn = false,
                     this.isNone = false
             }
+        },
+        quickSearch() {
+            let that = this
+            axios({
+                method: 'get',
+                url: '/api/recruit/quickQueryRecruitList?jobFiled=' + that.jobFiled + "&pageNum=" + that.pageNum,
+            })
+                .then(function (result) {
+                    console.log(result.data.object)
+                    that.result = result
+                    that.setPageInfo()
+                })
         }
     },
     mounted() {
         this.word = this.$route.query.word
+        this.jobFiled = this.$route.query.jobFiled
         console.log("接收到的关键字:" + this.word)
+        console.log("接收到的快捷查询编号:" + this.jobFiled)
         const userName = this.$cookie.get("cookieUserName")
         // console.log(userName+";"+userId+";"+userEmail+";"+userPhone)
         console.log(this.$cookie.get())
@@ -262,7 +294,11 @@ export default {
             this.loginhref = "/login"
         }
 
-        this.query()
+        if (this.jobFiled != null) {
+            this.quickSearch()
+        } else {
+            this.query()
+        }
 
     }
 }

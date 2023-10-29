@@ -14,7 +14,7 @@
                     <input name="" type="button" class="btnsearch" />
                 </div>
                 <div class="header_r">
-                    <a href="/login">个人登录</a>
+                    <a href="/login"> {{ username }}</a>
                     <a href="/login/register">注册</a>
                 </div>
             </div>
@@ -110,6 +110,8 @@ export default {
     data() {
         return {
             isLogin: false,
+
+            username:"",
         }
     },
     methods: {
@@ -124,9 +126,15 @@ export default {
         }
     },
     mounted() {
-        if (this.$cookie.get('userName') != null && this.$cookie.get('userName') != "") {
+        if (this.$cookie.get('cookieUserName') != null && this.$cookie.get('cookieUserName') != "") {
             this.isLogin = true
         }
+        if(!this.isLogin){
+            alert("请登陆")
+            window.location.href = "/index"
+        }
+
+        this.username = this.$cookie.get("cookieUserName")
     }
 }
 </script>
