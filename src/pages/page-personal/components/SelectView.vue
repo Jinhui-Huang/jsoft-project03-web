@@ -39,7 +39,7 @@
                                         <th width="9%">刷新时间</th>
                                     </tr>
                                 </thead>
-                                <tbody v-for="item in arr" :key="item">
+                                <tbody v-for="item in arr" :key="item.recruitId">
                                     <tr>
                                         <td>
                                             <a href="/info" class="jobname">后勤文员</a>
@@ -105,12 +105,15 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+import Cookies from 'js-cookie';
 export default {
     data() {
         return {
-            arr: new Array(10),
+            arr: "",
             isOn: true,
-            isNone: true
+            isNone: true,
+            userId:"",
         }
     },
     methods: {
@@ -122,7 +125,34 @@ export default {
                 this.isOn = false,
                     this.isNone = false
             }
+        },
+        getMyApplyRecruit(like,pageNum,userId){
+             /* 获取进入页面的申请职位信息 */
+        axios({
+            method: 'GET',
+            url: '/api/apply/getAllUserApply/'+like+'/'+pageNum+'/100001'
+        })
+            .then(response => {
+                let data = response.data
+                let code = data.code
+                let msg = data.msg
+                let info = data.object
+                if (code === 200001) { //判断你的请求是否成功
+                    console.log(data)
+                    this.arr = info.list
+                    console.log(this.arr)
+                } else {
+                    alert(msg)
+                }
+            }, error => {
+                console.log('错误', error.message)
+                // alert(error.message)
+            })
         }
+    },
+    mounted(){
+        const cookieValue = Cookies.get('cookieUserId');
+        this.getMyApplyRecruit(null,1,cookieValue)
     }
 }
 </script>
