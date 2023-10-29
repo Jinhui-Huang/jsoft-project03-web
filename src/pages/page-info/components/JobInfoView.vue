@@ -23,7 +23,8 @@
         <div class="jobtypeBox">
             <div class="DivLeft">
                 <div class="DivCompany">
-                    <div class="DivCompany_img"><img :src="require('@/../dist/static/images/company.gif')" width="180" /></div>
+                    <div class="DivCompany_img"><img :src="require('@/../dist/static/images/company.gif')" width="180" />
+                    </div>
                     <h1><a href="/info/company">广州市***信息技术有限公司</a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
@@ -67,7 +68,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_2">
-                        <div class="divJob_2_1">立即申请</div>
+                        <div @click="applyForRecruit()" class="divJob_2_1">立即申请</div>
                     </div>
                     <div class="clear"></div>
                     <div class="divJob_3">
@@ -100,3 +101,32 @@
         </div>
     </div>
 </template>
+
+<script>
+// partly edit by JoneElmo  10-29
+
+import axios from 'axios'
+export default {
+    data() {
+        return {
+            isLogin: false,
+        }
+    },
+    methods: {
+        applyForRecruit() {
+            if(!this.isLogin){
+                alert("请先登陆再进行申请！")
+            }else{
+                //用户申请职位逻辑写于此
+
+
+            }
+        }
+    },
+    mounted() {
+        if (this.$cookie.get('userName') != null && this.$cookie.get('userName') != "") {
+            this.isLogin = true
+        }
+    }
+}
+</script>

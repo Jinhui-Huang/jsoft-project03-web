@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="loginC">
-                <input name="" type="text" placeholder="请填写关键词或选择职位..." />
+                <input v-model="word" name="" type="text" placeholder="请输入要查询的职位名称..." />
                 <button @click="jumpSearchJob()"></button>
             </div>
             <div class="loginR">
@@ -21,8 +21,8 @@
         </div>
         <div class="menuDiv">
             <a href="/index" class="onnav">首页</a>
-            <a href="/personal/resume">个人中心</a>
-            <a href="/personal/select">我的职位</a>
+            <a @click="jumpUserCenter()" href="#">个人中心</a>
+            <a @click="jumpMyJob()" href="#">我的职位</a>
         </div>
         <div class="BodyMain">
             <div class="mainTop">
@@ -103,7 +103,7 @@
                         </div>
                         <div class="logintop">
                             <div class="loginC loginA select">
-                                <span>{{title}}</span>
+                                <span>{{ title }}</span>
                             </div>
                             <div class="loginC loginB">
                             </div>
@@ -130,11 +130,12 @@
                                 </div>
                             </div>
                             <div v-show="!isShow" class="ContentA">
-                                <span class="bigFont">用户名：</span>{{ userName }} <br/>   
-                                <span class="bigFont">手机号：</span>{{ phone }} <br/> 
-                                <span class="bigFont">邮箱：</span>{{ userEmail }} <br/> 
+                                <span class="bigFont">用户名：</span>{{ userName }} <br />
+                                <span class="bigFont">手机号：</span>{{ phone }} <br />
+                                <span class="bigFont">邮箱：</span>{{ userEmail }} <br />
+                                <a @click="logOut()" href="#">退出登陆</a>
                             </div>
-    
+
                         </div>
                     </div>
                     <div class="clear"></div>
@@ -177,27 +178,68 @@ export default {
         return {
             arr: new Array(10),
 
-            isShow:true,
+            isShow: true,
             loginArgs: "",
-            title:"个人登陆",
+            title: "个人登陆",
 
             phone: null,
             userEmail: null,
             password: null,
             userName: null,
             code: null,
-            userId: null
+            userId: null,
+
+            isLogin: false,
+            //模糊查询关键字
+            word:"",
         }
     },
-    mounted(){
-       //判断用户是否登陆 
-       
+    mounted() {
+        //判断用户是否登陆 
+        const userId = this.$cookie.get("cookieUserId")
+        const userEmail = this.$cookie.get("cookieUserEmail")
+        const userName = this.$cookie.get("cookieUserName")
+        const userPhone = this.$cookie.get("cookiePhone")
+        // console.log(userName+";"+userId+";"+userEmail+";"+userPhone)
+        console.log(this.$cookie.get())
+        if (userName != null && userName != "") {
+            console.log("用户已登陆")
+            this.isLogin = true
+            this.title = "个人信息"
+            this.isShow = false;
+            this.userName = userName
+            if (userPhone == null || userPhone == "") {
+                this.phone = "暂未绑定手机号"
+            } else {
+                this.phone = userPhone
+            }
+            if (userEmail == null || userEmail == "") {
+                this.userEmail = "暂未绑定邮箱"
+            } else {
+                this.userEmail = userEmail
+            }
+        }
     },
     methods: {
+        jumpUserCenter() {
+            if (this.isLogin) {
+                window.location = '/personal/resume'
+            } else {
+                window.location = '/login'
+            }
+        },
+        jumpMyJob() {
+            if (this.isLogin) {
+                window.location = '/personal/select'
+            } else {
+                window.location = '/login'
+            }
+        },
         jumpSearchJob() {
-            window.location = '/index/search';
+            window.location = '/index/search?word='+this.word;
         },
         getUserInfo() {  //获取用户详细信息
+            console.log("进入getUserInfo方法")
             let that = this
             axios({
                 method: 'post',
@@ -212,19 +254,25 @@ export default {
                 }
             })
                 .then(function (result) {
-                    console.log(result)
-                    let phone = result.data.object.phone
-                    console.log(result.data.object.userName)
-                    that.userName = result.data.object.userName
-                    let email = result.data.object.userEmail
-                    if(phone == null){
-                        that.phone = "未绑定手机号"
+                    console.log("getUserInfo方法返回值" + result)
+                    that.phone = that.$cookie.get("cookiePhone")
+                    console.log("cookie中获取的手机号" + that.phone)
+
+                    that.userName = that.$cookie.get("cookieUserName")
+                    console.log("cookie中获取的用户名" + that.userName)
+
+                    that.userEmail = that.$cookie.get("cookieUserEmail")
+                    console.log("cookie中获取的邮箱" + that.userName)
+
+                    if (that.phone == null || that.phone == "") {
+                        that.phone = "暂未绑定手机号"
                     }
-                    if(email == null){
-                        that.userEmail = "未绑定邮箱"
+                    if (that.userEmail == null || that.userEmail == "") {
+                        that.userEmail = "暂未绑定邮箱"
                     }
 
                 })
+
         },
         submitFormDTO() {
             // 简单的手机号正则，匹配11位数字
@@ -247,8 +295,7 @@ export default {
             let that = this;
             axios({
                 method: 'post',
-                url: '/api/user-info/login',
-                async: false,
+                url: '/api/user/login',
                 data: {
                     phone: that.phone,
                     userEmail: that.userEmail,
@@ -259,24 +306,37 @@ export default {
                 }
             })
                 .then(function (result) {
-                    console.log(result)
+                    console.log("submitFormDTO方法返回值" + result)
                     let code = result.data.code
                     if (code == 100000) {
                         alert("用户不存在或密码错误")
                     } else {
                         that.isShow = false
                         that.title = "个人资料"
+                        console.log("调用getUserInfo方法。。。")
                         that.getUserInfo()
+                        //刷新网页
+                        location.reload()
+
                     }
                 })
 
+        },
+        logOut() {
+            // 获取所有Cookie的名称
+            const cookieNames = Object.keys(this.$cookie.get());
+            // 清空所有Cookie
+            cookieNames.forEach(cookieName => {
+                this.$cookie.remove(cookieName);
+            });
+            location.reload()
         }
     }
 }
 </script>
 <style>
-    .bigFont{
-        font-size: 15px;
-        font-weight: bold;
-    }
+.bigFont {
+    font-size: 15px;
+    font-weight: bold;
+}
 </style>
