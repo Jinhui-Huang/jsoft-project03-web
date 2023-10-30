@@ -14,7 +14,7 @@
                     <input name="" type="button" class="btnsearch" />
                 </div>
                 <div class="header_r">
-                    <a href="/login">个人登录</a>
+                    <a href="/login"> {{ username }}</a>
                     <a href="/login/register">注册</a>
                 </div>
             </div>
@@ -93,6 +93,8 @@ export default {
         return {
             isLogin: false,
 
+            username:"",
+
             companyIcon: "",//企业图标
             companyName: "",//企业名称
             companyType: "",//企业性质
@@ -163,6 +165,12 @@ export default {
         if (this.$cookie.get('cookieUserName') != null && this.$cookie.get('cookieUserName') != "") {
             this.isLogin = true
         }
+        if(!this.isLogin){
+            alert("请登陆")
+            window.location.href = "/index"
+        }
+
+        this.username = this.$cookie.get("cookieUserName")
         let that = this;
         this.companyId = this.$route.query.companyId
         this.recruitId = this.$route.query.recruitId
