@@ -58,7 +58,7 @@
                     <div class="box1">
                         <span>激活码：</span>
                         <input name="smsCodeInput" v-model="smsCodeInput" type="text" class="yzm" />
-                        <b class="phonenum" @click="getSMSCode()">获取短信验证码</b>
+                        <b class="phonenum" @click="getSMSCode()">获取验证码</b>
                         <div class="clear"></div>
                     </div>
                     <div class="box1">
