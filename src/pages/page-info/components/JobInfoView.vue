@@ -9,10 +9,6 @@
                     </a>
                     <span>www.xxx.com</span>
                 </div>
-                <div class="header_c">
-                    <input name="" type="text" placeholder="请输入关键字..." class="keyword" />
-                    <input name="" type="button" class="btnsearch" />
-                </div>
                 <div class="header_r">
                     <a href="/login"> {{ username }}</a>
                     <a href="/login/register">注册</a>
