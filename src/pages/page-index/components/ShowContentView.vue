@@ -112,7 +112,7 @@
                             <div v-show="isShow" class="ContentA">
                                 <div class="txtInput"><input v-model="loginArgs" name="" type="text"
                                         placeholder="请输入用户名/手机号/邮箱" /></div>
-                                <div class="txtInput"><input v-model="password" name="" type="text" placeholder="请输入密码" />
+                                <div class="txtInput"><input v-model="password" name="" type="password" placeholder="请输入密码" />
                                 </div>
                                 <div class="txtbtn">
                                     <div style="float:left">

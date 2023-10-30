@@ -1,5 +1,5 @@
 <template>
-    <div>   
+    <div>
         <div class="compMain">
             <div class="main">
                 <div class="CpLogo">
@@ -54,7 +54,8 @@
                                 </div>
                             </div>
                             <div class="zhiweiR">
-                                <a href=# :class="{ 'ysq': item.userId != null }" @click="apply(item)">{{ item.userId == null ?
+                                <a href=# :class="{ 'ysq': item.userId != null }" @click="apply(item)">{{ item.userId ==
+                                    null ?
                                     '立即申请' : '已申请' }}</a>
                             </div>
                         </div>
@@ -179,37 +180,14 @@ export default {
         let companyId = this.$route.query.companyId
         let that = this;
         const cookieValue = Cookies.get('cookieUserId');
-        /* 获取企业信息 */
-        axios({
-            method: 'GET',
-            url: '/api/company/getCompanyInfo/' + companyId //你的后端路径
-        })
-            .then(response => {
-                let data = response.data
-                let code = data.code
-                let msg = data.msg
-                let info = data.object
-                if (code === 200001) { //判断你的请求是否成功
-                    console.log(data)
-                    that.companyIcon = require('@/../public/static/images/' + info.companyIcon)
-                    that.companyName = info.companyName
-                    that.companyType = info.companyType
-                    that.companyField = info.companyField
-                    that.companyScale = info.companyScale
-                    that.companyHome = info.companyHome
-                    that.companyAddress = info.companyAddress
-                    that.companyText = info.companyText
-                } else {
-                    alert(msg)
-                }
-            }, error => {
-                console.log('错误', error.message)
-                // alert(error.message)
-            }),
-            /* 获取企业下所有招聘信息 */
+        if (cookieValue == null || cookieValue == "") {
+            alert("请先登录!")
+            window.location = "/index"
+        } else {
+            /* 获取企业信息 */
             axios({
                 method: 'GET',
-                url: '/api/company/getCompanyRecruit/' + companyId + '/' + cookieValue //你的后端路径
+                url: '/api/company/getCompanyInfo/' + companyId //你的后端路径
             })
                 .then(response => {
                     let data = response.data
@@ -218,7 +196,14 @@ export default {
                     let info = data.object
                     if (code === 200001) { //判断你的请求是否成功
                         console.log(data)
-                        that.arr = info
+                        that.companyIcon = require('@/../public/static/images/' + info.companyIcon)
+                        that.companyName = info.companyName
+                        that.companyType = info.companyType
+                        that.companyField = info.companyField
+                        that.companyScale = info.companyScale
+                        that.companyHome = info.companyHome
+                        that.companyAddress = info.companyAddress
+                        that.companyText = info.companyText
                     } else {
                         alert(msg)
                     }
@@ -226,26 +211,47 @@ export default {
                     console.log('错误', error.message)
                     // alert(error.message)
                 }),
-            /* 判断企业是否被关注 */
-            axios({
-                method: 'GET',
-                url: '/api/follow/checkFollowStatus/' + companyId + '/' + cookieValue
-            })
-                .then(response => {
-                    let data = response.data
-                    let code = data.code
-                    let msg = data.msg
-                    let info = data.object
-                    if (code === 100001) {
-                        console.log(data)
-                        that.followStatus = false
-                    } else {
-                        console.log(data)
-                    }
-                }, error => {
-                    console.log('错误', error.message)
-                    // alert(error.message)
+                /* 获取企业下所有招聘信息 */
+                axios({
+                    method: 'GET',
+                    url: '/api/company/getCompanyRecruit/' + companyId + '/' + cookieValue //你的后端路径
                 })
+                    .then(response => {
+                        let data = response.data
+                        let code = data.code
+                        let msg = data.msg
+                        let info = data.object
+                        if (code === 200001) { //判断你的请求是否成功
+                            console.log(data)
+                            that.arr = info
+                        } else {
+                            alert(msg)
+                        }
+                    }, error => {
+                        console.log('错误', error.message)
+                        // alert(error.message)
+                    }),
+                /* 判断企业是否被关注 */
+                axios({
+                    method: 'GET',
+                    url: '/api/follow/checkFollowStatus/' + companyId + '/' + cookieValue
+                })
+                    .then(response => {
+                        let data = response.data
+                        let code = data.code
+                        let msg = data.msg
+                        let info = data.object
+                        if (code === 100001) {
+                            console.log(data)
+                            that.followStatus = false
+                        } else {
+                            console.log(data)
+                        }
+                    }, error => {
+                        console.log('错误', error.message)
+                        // alert(error.message)
+                    })
+        }
     },
     computed: {
         formattedDate() {

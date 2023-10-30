@@ -7,7 +7,6 @@
                         <img src="/static/images/logo_1.png" />
                         <img src="/static/images/logo_2.png" />
                     </a>
-                    <span>www.xxx.com</span>
                 </div>
                 <div class="header_r">
                     <a href="/login"> {{ username }}</a>
@@ -26,7 +25,7 @@
                         <p>行业：{{ companyField }}</p>
                         <p>性质：{{ companyType }}</p>
                         <p>规模：{{ companyScale }}</p>
-                        <p>企业主页：<a href="">{{ companyHome }}</a></p>
+                        <p>企业主页：<a :href="companyHome">{{ companyHome }}</a></p>
                         <p>详细地址：{{ companyAddress }}</p>
                         <p>{{ companyText }}</p>
                     </div>
