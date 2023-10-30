@@ -52,7 +52,7 @@
                                         </td>
                                         <td></td>
                                         <td>{{ item.recruitAddress }}</td>
-                                        <td><span>{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax }}K</span></td>
+                                        <td><span>{{ item.recruitSalary}}</span></td>
                                         <td>{{ new Date(item.recruitTime).toLocaleString() }}</td>
                                     </tr>
                                     <tr class="xxdetail" :class="{ none: isNone }">

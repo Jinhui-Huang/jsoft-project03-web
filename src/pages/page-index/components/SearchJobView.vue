@@ -11,9 +11,10 @@
                 <img src="/static/images/spirit_40.png" />
             </div>
             <div class="topR">
-                <div class="topR0 topR2"><a @click="logOut()" href="#">退出登陆</a></div>
-                <div class="topR0 topR2"><a href="/login/register">注册用户</a></div>
-                <div class="topR0 topR3 loginHrefClass"><a name="loginHref" :href=loginhref>{{ userName }}</a></div>
+                <div class="topR0 topR3 "><a name="loginHref" :href=loginhref>{{ userName }}</a></div>
+                <div class="topR0 topR2"><a @click="logOut()" href="#" v-if="!showRegister">退出登陆</a></div>
+                <div class="topR0 topR2"><a href="/login/register" v-if="showRegister">注册用户</a></div>
+                
 
                 <div class="clear"></div>
             </div>
@@ -73,7 +74,7 @@
                             </td>
                             <td></td>
                             <td>{{ item.recruitAddress }}</td>
-                            <td><span>{{ item.recruitSalaryMin }}k - {{ item.recruitSalaryMax }}k</span></td>
+                            <td><span>{{ item.recruitSalary }}</span></td>
                             <td>{{ new Date(item.recruitTime).toLocaleString() }}</td>
                         </tr>
                         <tr class="xxdetail" :class="{ none: isNone }">
@@ -148,7 +149,10 @@ export default {
             //当前页
             pageNum: 1,
             //页面数据量
-            pageSize: null
+            pageSize: null,
+
+            showRegister:false
+
         }
     },
     methods: {
@@ -260,6 +264,7 @@ export default {
         } else {
             this.userName = "个人登陆"
             this.loginhref = "/login"
+            this.showRegister = true
         }
 
         this.query()

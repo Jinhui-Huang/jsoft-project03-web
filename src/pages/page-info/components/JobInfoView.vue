@@ -23,7 +23,7 @@
         <div class="jobtypeBox">
             <div class="DivLeft">
                 <div class="DivCompany">
-                    <div class="DivCompany_img"><img :src="companyIcon" width="180" /></div>
+                    <div class="DivCompany_img"><img style="height: 150px;" :src="companyIcon" width="180" /></div>
                     <h1><a :href="'/info/company?companyId='+this.companyId" >{{ companyName }}</a><img src="/static/images/16.png" /></h1>
                     <div class="clear"></div>
                     <div class="DivLeft_2">
@@ -179,7 +179,7 @@ export default {
                 let info = data.object
                 if (code === 200001) { //判断你的请求是否成功
                     console.log(data)
-                    that.companyIcon = require('@/../dist/static/images/' + info.companyIcon)
+                    that.companyIcon = require('@/../public/static/images/' + info.companyIcon)
                     that.companyName = info.companyName
                     that.companyType = info.companyType
                     that.companyField = info.companyField
@@ -208,7 +208,7 @@ export default {
                         that.recruitName = info.recruitName
                         that.recruitTag = info.recruitTag
                         that.recruitAddress = info.recruitAddress
-                        that.salary = info.recruitSalaryMin + "K-" + info.recruitSalaryMax + "K[参考工资]"
+                        that.salary = info.recruitSalary+ "[参考工资]"
                         that.recruitNumber = info.recruitNumber
                         that.recruitDegree = info.recruitDegree
                         that.recruitAge = info.recruitAge

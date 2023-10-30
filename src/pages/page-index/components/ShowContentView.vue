@@ -149,13 +149,15 @@
                 </div>
                 <div class="clear"></div>
                 <div class="highMoney">
-                    <div v-for="item in HighRecruitList" :key="item.companyId+'-'+item.recruitId">
+                    <div v-for="item in HighRecruitList" :key="item.companyId + '-' + item.recruitId">
                         <div class="lineBox"></div>
                         <div class="divBox">
-                            <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId" ><img :src="'/static/images/'+item.company.companyIcon" width="84" /></a>
-                            <p class="tit"><a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a></p>
-                            <p class="sub"><a :href="'/info/company?companyId='+item.companyId" >{{item.companyName}}</a></p>
-                            <p class="num"><span>{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax}}K</span></p>
+                            <a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId"><img style="height: 80px;"
+                                    :src="'/static/images/' + item.company.companyIcon" width="84" /></a>
+                            <p class="tit"><a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId">{{
+                                item.recruitName }}</a></p>
+                            <p class="sub"><a :href="'/info/company?companyId=' + item.companyId">{{ item.companyName }}</a></p>
+                            <p class="num"><span>{{ item.recruitSalary}}</span></p>
                         </div>
                     </div>
                 </div>
@@ -191,9 +193,9 @@ export default {
 
             isLogin: false,
             //模糊查询关键字
-            word:"",
+            word: "",
 
-            HighRecruitList:""
+            HighRecruitList: ""
         }
     },
     mounted() {
@@ -260,7 +262,7 @@ export default {
             }
         },
         jumpSearchJob() {
-            window.location = '/index/search?word='+this.word;
+            window.location = '/index/search?word=' + this.word;
         },
         getUserInfo() {  //获取用户详细信息
             console.log("进入getUserInfo方法")

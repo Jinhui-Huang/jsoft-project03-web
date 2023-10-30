@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div>   
         <div class="compMain">
             <div class="main">
                 <div class="CpLogo">
-                    <img :src="companyIcon" />
+                    <img style="height: 150px;" :src="companyIcon" />
                 </div>
                 <div class="CpDetail">
                     <div class="CompanyName">
@@ -13,7 +13,7 @@
                         <span class="ygz" @click="unfollow" v-if="!followStatus">已关注</span>
                     </div>
                     <p>{{ companyType }} | {{ companyScale }} | {{ companyField }}</p>
-                    <p><a href="http://www.baidu.com">{{ companyHome }}</a></p>
+                    <p><a :href="companyHome">{{ companyHome }}</a></p>
                     <p>{{ companyAddress }}</p>
                 </div>
             </div>
@@ -37,11 +37,12 @@
                         <div class="zhiwei" v-for="item in arr" :key="item.recruitId">
                             <div class="zhiweiL">
                                 <div class="zw1">
-                                    <a :href="'/info?companyId='+item.companyId+'&recruitId='+item.recruitId">{{ item.recruitName }}</a>
+                                    <a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId">{{
+                                        item.recruitName }}</a><br>
                                     <span>[{{ item.recruitAddress }}]</span>
-                                </div>
+                                </div><br> <br>
                                 <div class="zw2">
-                                    <span class="red">月薪{{ item.recruitSalaryMin }}K-{{ item.recruitSalaryMax }}K</span> |
+                                    <span class="red">月薪{{ item.recruitSalary }}</span> |
                                     招聘{{ item.recruitNumber }}人 | {{ item.recruitType }} | {{ item.recruitAge }} | {{
                                         item.recruitExp }} | {{ new Date(item.recruitTime).toLocaleString() }}刷新
                                 </div>
@@ -53,9 +54,10 @@
                                 </div>
                             </div>
                             <div class="zhiweiR">
-                                <a href=# :class="{'ysq':item.userId != null}" @click="apply(item)">{{ item.userId == null ? '立即申请' : '已申请' }}</a>
+                                <a href=# :class="{ 'ysq': item.userId != null }" @click="apply(item)">{{ item.userId == null ?
+                                    '立即申请' : '已申请' }}</a>
                             </div>
-                        </div>  
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -134,7 +136,7 @@ export default {
             let cookieValue = Cookies.get('cookieUserId');
             axios({
                 method: "get",
-                url: '/api/follow/followCompany/'+companyId+'/'+cookieValue,
+                url: '/api/follow/followCompany/' + companyId + '/' + cookieValue,
             })
                 .then(response => {
                     let data = response.data
@@ -156,7 +158,7 @@ export default {
             let cookieValue = Cookies.get('cookieUserId');
             axios({
                 method: "get",
-                url: '/api/follow/unfollowCompany/'+companyId+'/'+cookieValue,
+                url: '/api/follow/unfollowCompany/' + companyId + '/' + cookieValue,
             })
                 .then(response => {
                     let data = response.data
@@ -189,7 +191,7 @@ export default {
                 let info = data.object
                 if (code === 200001) { //判断你的请求是否成功
                     console.log(data)
-                    that.companyIcon = require('@/../dist/static/images/' + info.companyIcon)
+                    that.companyIcon = require('@/../public/static/images/' + info.companyIcon)
                     that.companyName = info.companyName
                     that.companyType = info.companyType
                     that.companyField = info.companyField
@@ -224,17 +226,17 @@ export default {
                     console.log('错误', error.message)
                     // alert(error.message)
                 }),
-                /* 判断企业是否被关注 */
-                axios({
+            /* 判断企业是否被关注 */
+            axios({
                 method: 'GET',
-                url: '/api/follow/checkFollowStatus/' + companyId + '/' + cookieValue 
+                url: '/api/follow/checkFollowStatus/' + companyId + '/' + cookieValue
             })
                 .then(response => {
                     let data = response.data
                     let code = data.code
                     let msg = data.msg
                     let info = data.object
-                    if (code === 100001) { 
+                    if (code === 100001) {
                         console.log(data)
                         that.followStatus = false
                     } else {
