@@ -2,11 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
-import jsCookie from 'js-cookie'
+import Cookies from 'js-cookie'
 
+Vue.prototype.$cookies = Cookies
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
-Vue.prototype.$cookie = jsCookie
 
 new Vue({
   axios,
