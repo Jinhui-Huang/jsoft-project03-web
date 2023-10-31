@@ -4,8 +4,7 @@
             <div class="topL">
                 <div class="logo">
                     <a href="/index">
-                        <img src="/static/images/LOGO.png" />
-                        <img src="/static/images/view_logo40.png" class="img1" />
+                        <img style="height: 50px; width: 50px;" src="/static/images/MYHD.png" />
                     </a>
                 </div>
                 <img src="/static/images/spirit_40.png" />
@@ -132,7 +131,7 @@ export default {
 
             loginhref: "#",
 
-            word: "",
+            word: " ",
 
             result: null,
 
@@ -193,12 +192,15 @@ export default {
         query() {
             // 模糊查询发送请求
             let that = this
+            console.log("点击查询后获取到的word是 "+that.word)
             //获取全部数据
             axios({
                 method: 'get',
                 url: '/api/recruit/queryRecruitList?word=' + that.word + "&pageNum=" + that.pageNum
             })
                 .then(function (result) {
+                    console.log("模糊查询获取到的结果是：")
+                    console.log(result.data.object)
                     that.result = result
                     that.setPageInfo()
                 })
@@ -274,6 +276,7 @@ export default {
                 url: '/api/recruit/quickQueryRecruitList?jobFiled=' + that.jobFiled + "&pageNum=" + that.pageNum,
             })
                 .then(function (result) {
+                    console.log("快速查询获取到的结果是")
                     console.log(result.data.object)
                     that.result = result
                     that.setPageInfo()
@@ -283,8 +286,8 @@ export default {
     mounted() {
         this.word = this.$route.query.word
         this.jobFiled = this.$route.query.jobFiled
-        console.log("接收到的关键字:" + this.word)
-        console.log("接收到的快捷查询编号:" + this.jobFiled)
+        console.log("mounted接收到的关键字:" + this.word)
+        console.log("mounted接收到的快捷查询编号:" + this.jobFiled)
         const userName = this.$cookie.get("cookieUserName")
         // console.log(userName+";"+userId+";"+userEmail+";"+userPhone)
         console.log(this.$cookie.get())

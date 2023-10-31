@@ -2,7 +2,7 @@
     <div>
         <div class="header">
             <div class="mainwarp">
-                <div class="logo"><a href="/index"><img src="/static/images/log.png" /></a></div>
+                <div class="logo"><a href="/index"><img style="height: 50px; width: 50px;" src="/static/images/MYHD.png" /></a></div>
                 <div class="welcome">重置密码</div>
                 <div class="headerright">
                     <a href="/login">个人登录 </a>

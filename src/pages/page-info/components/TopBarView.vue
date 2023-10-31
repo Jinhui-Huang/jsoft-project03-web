@@ -3,8 +3,7 @@
         <div class="main">
             <div class="header_l">
                 <a href="/index">
-                    <img src="/static/images/logo_1.png" />
-                    <img src="/static/images/logo_2.png" />
+                    <img style="height: 50px; width: 50px;" src="/static/images/MYHD.png" />
                 </a>
                 
             </div>

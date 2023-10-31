@@ -3,9 +3,12 @@
         <div class="topDiv">
         </div>
         <div class="loginDiv">
-            <div class="loginL">
-                <img src="/static/images/LOGO.png" />
-                <img src="/static/images/view_logo40.png" />
+            <div class="loginL logonCont">
+                <img src="/static/images/MYHD.png" />
+                <div style="display: inline;
+                            font-weight: bolder;
+                            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                            font-size: 20px;">MYHD人才招聘</div>
             </div>
             <div class="loginAddress">
                 <div class="add1">
@@ -30,37 +33,58 @@
                     <ul>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme1" ><b></b> <div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields1" :key="index">{{ item.filedName }} </div> </span>
+                                <span class="itme1"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields1" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme2"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields2" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme2"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields2" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme3"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields3" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme3"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields3" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme4"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields4" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme4"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields4" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme5"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields5" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme5"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields5" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme6"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields6" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme6"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields6" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                         <div class="items">
                             <div class="itemOne">
-                                <span class="itme7"><b></b><div @click="handleItemClike(item.jobFiled)" class="horizonal" v-for="(item,index) in fields7" :key="index">{{ item.filedName }} </div></span>
+                                <span class="itme7"><b></b>
+                                    <div @click="handleItemClike(item.jobFiled)" class="horizonal"
+                                        v-for="(item, index) in fields7" :key="index">{{ item.filedName }} </div>
+                                </span>
                             </div>
                         </div>
                     </ul>
@@ -112,7 +136,8 @@
                             <div v-show="isShow" class="ContentA">
                                 <div class="txtInput"><input v-model="loginArgs" name="" type="text"
                                         placeholder="请输入用户名/手机号/邮箱" /></div>
-                                <div class="txtInput"><input v-model="password" name="" type="password" placeholder="请输入密码" />
+                                <div class="txtInput"><input v-model="password" name="" type="password"
+                                        placeholder="请输入密码" />
                                 </div>
                                 <div class="txtbtn">
                                     <div style="float:left">
@@ -156,12 +181,15 @@
                     <div v-for="item in HighRecruitList" :key="item.companyId + '-' + item.recruitId">
                         <div class="lineBox"></div>
                         <div class="divBox">
-                            <a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId"><img style="height: 80px;"
-                                    :src="'/static/images/' + item.company.companyIcon" width="84" /></a>
-                            <p class="tit"><a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId">{{
-                                item.recruitName }}</a></p>
-                            <p class="sub"><a :href="'/info/company?companyId=' + item.companyId">{{ item.companyName }}</a></p>
-                            <p class="num"><span>{{ item.recruitSalary}}</span></p>
+                            <a :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId"><img
+                                    style="height: 80px;" :src="'/static/images/' + item.company.companyIcon"
+                                    width="84" /></a>
+                            <p class="tit"><a
+                                    :href="'/info?companyId=' + item.companyId + '&recruitId=' + item.recruitId">{{
+                                        item.recruitName }}</a></p>
+                            <p class="sub"><a :href="'/info/company?companyId=' + item.companyId">{{ item.companyName }}</a>
+                            </p>
+                            <p class="num"><span>{{ item.recruitSalary }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -199,45 +227,45 @@ export default {
             //模糊查询关键字
             word: "",
 
-            HighRecruitList:"",
+            HighRecruitList: "",
             // 领域列表 每一行的信息
-            fields1:[],
-            fields2:[],
-            fields3:[],
-            fields4:[],
-            fields5:[],
-            fields6:[],
-            fields7:[],
+            fields1: [],
+            fields2: [],
+            fields3: [],
+            fields4: [],
+            fields5: [],
+            fields6: [],
+            fields7: [],
             //点击领域后获取的值，将会传给后端做查询
-            jobFiled:null
+            jobFiled: null
 
         }
     },
     mounted() {
         this.init()
         this.getJobFields()
-      /* 获取高薪职位 */
-      axios({
-        method: 'GET',
-        url: '/api/recruit/getHighSalaryRecruit'
-      })
-          .then(response => {
-            let data = response.data
-            let code = data.code
-            let msg = data.msg
-            let info = data.object
-            if (code === 200001) { //判断你的请求是否成功
-              console.log(data)
-              this.HighRecruitList = info.list
-              console.log(this.HighRecruitList)
-            } else {
+        /* 获取高薪职位 */
+        axios({
+            method: 'GET',
+            url: '/api/recruit/getHighSalaryRecruit'
+        })
+            .then(response => {
+                let data = response.data
+                let code = data.code
+                let msg = data.msg
+                let info = data.object
+                if (code === 200001) { //判断你的请求是否成功
+                    console.log(data)
+                    this.HighRecruitList = info.list
+                    console.log(this.HighRecruitList)
+                } else {
 
-              alert(msg)
-            }
-          }, error => {
-            console.log('错误', error.message)
-            // alert(error.message)
-          })
+                    alert(msg)
+                }
+            }, error => {
+                console.log('错误', error.message)
+                // alert(error.message)
+            })
     },
     methods: {
         init() {
@@ -266,29 +294,29 @@ export default {
                 }
             }
         },
-        handleItemClike(jobFiled){
-            console.log("获取到的工作领域是"+jobFiled)
+        handleItemClike(jobFiled) {
+            console.log("获取到的工作领域是" + jobFiled)
             this.jobFiled = jobFiled
 
-            window.location='/index/search?jobFiled=' + this.jobFiled;
+            window.location = '/index/search?word=&jobFiled=' + this.jobFiled;
         },
-        getJobFields(){
+        getJobFields() {
             let that = this
             axios({
                 method: 'get',
                 url: '/api/recruit/get_fields',
             })
-            .then(function (result){
-                console.log("获取到的领域列表信息：")
-                console.log(result.data.object)
-                that.fields1 = result.data.object[0]
-                that.fields2 = result.data.object[1]
-                that.fields3 = result.data.object[2]
-                that.fields4 = result.data.object[3]
-                that.fields5 = result.data.object[4]
-                that.fields6 = result.data.object[5]
-                that.fields7 = result.data.object[6]
-            })
+                .then(function (result) {
+                    console.log("获取到的领域列表信息：")
+                    console.log(result.data.object)
+                    that.fields1 = result.data.object[0]
+                    that.fields2 = result.data.object[1]
+                    that.fields3 = result.data.object[2]
+                    that.fields4 = result.data.object[3]
+                    that.fields5 = result.data.object[4]
+                    that.fields6 = result.data.object[5]
+                    that.fields7 = result.data.object[6]
+                })
         },
         jumpUserCenter() {
             if (this.isLogin) {
@@ -403,12 +431,13 @@ export default {
     }
 }
 </script>
-<style>
-.bigFont {
+<style>.bigFont {
     font-size: 15px;
     font-weight: bold;
 }
-.horizonal{
+
+.horizonal {
     display: inline;
 }
-</style>
+
+.logoTop {}</style>
